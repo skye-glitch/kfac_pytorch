@@ -60,7 +60,8 @@ def get_eigendecomp(tensor, clip=0.0, concat=True, symmetric=True):
       eigenvalues)`.
     """
     if symmetric:
-        d, Q = torch.symeig(tensor, eigenvectors=True)
+        #d, Q = torch.symeig(tensor, eigenvectors=True)
+        d, Q = torch.linalg.eigh(tensor)
     else:
         d, Q = torch.eig(tensor, eigenvectors=True)
         d = d[:, 0]

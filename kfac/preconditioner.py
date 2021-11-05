@@ -9,6 +9,10 @@ from . import layers as kfac_layers
 from . import utils
 from . import comm
 
+#test code: allreduce
+import time
+import datetime
+
 try:
     from torch.cuda.amp import autocast
     TORCH_FP16 = True
@@ -116,12 +120,12 @@ class KFAC(optim.Optimizer):
           fraction. Note: this fraction should produce evenly sized groups.
           E.g. world_size=8 and fraction=0.33 would produce groups of size
           3, 3, and 2 which would not be valid. (default: 0.25).
-      precompute_outer_eigen (bool, optional): If True, 
+      precompute_outer_eigen (bool, optional): if True, 
           1 / (dG * dG.T + damping) will be computed on the inverse worker and
           broadcast to remaining gradient workers. This value is redundantly
           computed every non-KFAC update step on every worker so precomputing
           on a single worker can reduce computation at the cost of slightly
-          more memory (default: False).
+          more memory (default: True, line 157).
       use_eigen_decomp (bool, optional): use the eigendecomposition method for
           the KFAC update, otherwise use normal inv method (default: True)
       skip_layers (str or list, optional): name or list of names of modules to
@@ -350,7 +354,9 @@ class KFAC(optim.Optimizer):
             self.compute_inverses(damping=self.param_groups[0]['damping'])
             if self.comm_method in [CommMethod.COMM_OPT, 
                                     CommMethod.HYBRID_OPT]:
+                #beg = self._get_timing(True)
                 self.broadcast_inverses()
+                #self._print_timing(True, "load state broadcast inverse time", beg)
 
     def register_module(self, module, name=None):
         """Create and register a KFAC layer for a module.
@@ -471,6 +477,8 @@ class KFAC(optim.Optimizer):
 
     @torch.no_grad()
     def step(self, closure=None):
+    #test code: allreduce
+    #def step(self, closure=None, args=None):
         """Perform one K-FAC step
 
         Note:
@@ -493,8 +501,14 @@ class KFAC(optim.Optimizer):
 
         if params['step'] % params['factor_update_freq'] == 0:
             if not self.compute_factor_in_hook:
+                # beg = self._get_timing(True)
                 self.compute_factors(alpha=params['factor_decay'])
+                # self._print_timing(True, "\nCompute factor time:", beg)
+            #test code: allrecuce
+            #beg = self._get_timing(args.verbose)
             self.allreduce_factors()
+            #self._print_timing(args.verbose, "allreduce factors time:", beg)
+
 
         # We do this after compute_factors() because the buffers
         # are not instantiated until this point and we use the size of the
@@ -504,15 +518,22 @@ class KFAC(optim.Optimizer):
             self.workers_assigned = True
 
         if params['step'] % params['inv_update_freq'] == 0:
+            beg = self._get_timing(True)
             self.compute_inverses(damping=params['damping'])
+            self._print_timing(True, "\nCompute inverse (eigh) time:", beg)
             if self.comm_method in \
                     [CommMethod.COMM_OPT, CommMethod.HYBRID_OPT]:
+               # beg = self._get_timing(args.verbose)
                 self.broadcast_inverses()
+               # self._print_timing(args.verbose, "broadcast inverses time:", beg)
 
         self.compute_preconditioned_gradients(damping=params['damping'])
-        if self.comm_method in [CommMethod.MEM_OPT, CommMethod.HYBRID_OPT]:
-            self.broadcast_gradients()
 
+        if self.comm_method in [CommMethod.MEM_OPT, CommMethod.HYBRID_OPT]:
+            #beg = self._get_timing(args.verbose)
+            self.broadcast_gradients()
+           # self._print_timing(args.verbose, "broadcast precond-gradient time:", beg)
+            
         scale = None if params['kl_clip'] is None \
                      else self._compute_grad_scale()
 
@@ -526,7 +547,6 @@ class KFAC(optim.Optimizer):
         """Allreduce the factors for all layers"""
         if comm.backend.size() == 1:
             return
-
         handles = []
         for layer in self.layers:
             handles.extend(layer.allreduce_factors())
@@ -546,11 +566,12 @@ class KFAC(optim.Optimizer):
         """Broadcast the preconditioned gradients for all layers"""
         if comm.backend.size() == 1:
             return
-        
+
         handles = []
         for layer in self.layers:
             handles.extend(layer.broadcast_gradient())
         comm.backend.sync(handles)
+
 
     @torch.no_grad()
     def compute_inverses(self, damping=0.001):
@@ -630,8 +651,9 @@ class KFAC(optim.Optimizer):
             raise ValueError(
                     'assignment_strategy must be "compute" or "memory"')
 
-        a_sizes = [l.state['A'].shape[0] for l in self.layers]
-        g_sizes = [l.state['G'].shape[0] for l in self.layers]
+        # FIX for the embedding layer where we have A_factor
+        a_sizes = [l.state['A_shape'][0] for l in self.layers]
+        g_sizes = [l.state['G_shape'][0] for l in self.layers]
         a_times = list(map(func, a_sizes))
         g_times = list(map(func, g_sizes))
             
@@ -734,3 +756,12 @@ class KFAC(optim.Optimizer):
     def _save_grad_output_as_input(self, module, grad_input, grad_output):
         self.hook_layers[module].save_inputs(grad_output)
 
+    def _get_timing(self, verbose):
+        if verbose:
+            torch.cuda.synchronize()
+            return time.perf_counter()
+
+    def _print_timing(self, verbose, msg, beg):
+        if verbose:
+            torch.cuda.synchronize()
+            print(msg, time.perf_counter() - beg)

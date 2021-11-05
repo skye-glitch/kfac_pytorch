@@ -48,13 +48,13 @@ else
   LOCAL_RANK=$OMPI_COMM_WORLD_RANK
 fi
 
-module load conda
-conda deactivate
-conda activate pytorch
-module unload spectrum_mpi
-module use /home/01255/siliu/mvapich2-gdr/modulefiles/
-module load gcc/7.3.0 
-module load mvapich2-gdr/2.3.4
+# module load conda
+# conda deactivate
+# conda activate pytorch
+# module unload spectrum_mpi
+# module use /home/01255/siliu/mvapich2-gdr/modulefiles/
+# module load gcc/7.3.0 
+# module load mvapich2-gdr/2.3.4
 
 export MV2_USE_CUDA=1
 export MV2_ENABLE_AFFINITY=1

@@ -27,6 +27,8 @@ class KFACLayer(object):
         self.prediv_eigenvalues = prediv_eigenvalues
         self.symmetry_aware_comm=symmetry_aware_comm
         self.use_eigen_decomp=use_eigen_decomp
+        # TODO sikan: expose this as an option
+        self.hybrid_eign_decomp = False 
         self.eps = 1e-10
 
         # Should be overridden by implementing class
@@ -337,7 +339,9 @@ class KFACLayer(object):
             return
 
         # Compute preconditioned gradient using specified inverse method
-        if self.use_eigen_decomp:
+        if self.hybrid_eign_decomp:
+            grad = self._get_precondition_gradient_hybrid()
+        elif self.use_eigen_decomp:
             grad = self._get_precondition_gradient_eigen(damping)
         else:
             if self.factors_are_symmetric and self.symmetry_aware_comm:
@@ -387,6 +391,7 @@ class KFACLayer(object):
         del self.a_inputs[:]  # clear accumulated inputs
         if self.state['A'] is None:
             self.state['A'] = torch.diag(A_new.new(A_new.shape[0]).fill_(1))
+            self.state['A_shape'] = A_new.shape
         utils.update_running_avg(A_new, self.state['A'], alpha=alpha)
 
     def update_G_factor(self, alpha=0.95):
@@ -408,12 +413,13 @@ class KFACLayer(object):
         else:
             self.g_outputs = [x.to(self.factor_dtype) for x in self.g_outputs]
 
-        if len(self.g_outputs) == 0:
+        if len(self.g_outputs) == 0: # or len(self.g_outputs[0]) == 0:
             return
         G_new = self._get_G_factor(self.g_outputs)
         del self.g_outputs[:]  # clear accumulated outputs
         if self.state['G'] is None:
             self.state['G'] = torch.diag(G_new.new(G_new.shape[0]).fill_(1))
+            self.state['G_shape'] = G_new.shape
         utils.update_running_avg(G_new, self.state['G'], alpha=alpha)
 
     def update_gradient(self, scale=None):
@@ -435,9 +441,14 @@ class KFACLayer(object):
             Q, d = utils.get_eigendecomp(factor.to(torch.float32), concat=False, 
                                          symmetric=self.factors_are_symmetric)
             return Q.to(self.inv_dtype), d.to(self.inv_dtype)
-        else:
+        else:            
             inv = utils.get_inverse(factor.to(torch.float32), damping=damping, 
                         symmetric=self.factors_are_symmetric)
+
+            #test code
+            # if self.__class__.__name__ == "BertLMPredictionHead":
+            #     print("input size {}, outputsize {}".format(list(factor.size()), list(inv.size()))) 
+            # print("all inverse, name {}, input size {}, outputsize {}".format(self.__class__.__name__, list(factor.size()), list(inv.size())))           
             return inv.to(self.inv_dtype)
 
     def _get_A_factor(self, a_inputs):
@@ -455,6 +466,9 @@ class KFACLayer(object):
     def _get_weight_grad(self):
         """Get weight.grad tensor of module"""
         return self.module.weight.grad
+
+    def _get_precondition_gradient_hybrid(self):
+        raise NotImplementedError('Custom precond gradient needs to be implemented')
 
     def _get_precondition_gradient_eigen(self, damping=0.001):
         """Compute preconditioned gradient for eigendecomp method"""
@@ -476,9 +490,9 @@ class KFACLayer(object):
 
     def _set_bias_grad(self, grad):
         """Set bias.grad tensor of module"""
-        self.module.bias.grad = grad.contiguous()
+        self.module.bias.grad = grad
 
     def _set_weight_grad(self, grad):
         """Set weight.grad tensor of module"""
-        self.module.weight.grad = grad.contiguous()
+        self.module.weight.grad = grad
 

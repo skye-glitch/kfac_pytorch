@@ -520,7 +520,7 @@ class KFAC(optim.Optimizer):
         if params['step'] % params['inv_update_freq'] == 0:
             beg = self._get_timing(True)
             self.compute_inverses(damping=params['damping'])
-            self._print_timing(True, "\nCompute inverse (eigh) time:", beg)
+            #self._print_timing(True, "\nCompute inverse (eigh) time:", beg)
             if self.comm_method in \
                     [CommMethod.COMM_OPT, CommMethod.HYBRID_OPT]:
                # beg = self._get_timing(args.verbose)
@@ -652,6 +652,9 @@ class KFAC(optim.Optimizer):
                     'assignment_strategy must be "compute" or "memory"')
 
         # FIX for the embedding layer where we have A_factor
+        # for l in self.layers:
+        #     print(l)
+        #     print(l.state['A_shape'])
         a_sizes = [l.state['A_shape'][0] for l in self.layers]
         g_sizes = [l.state['G_shape'][0] for l in self.layers]
         a_times = list(map(func, a_sizes))

@@ -59,7 +59,8 @@ class KFACLayer(object):
         if include_inverses:
             return self.state
         else:
-            return {'A': self.state['A'], 'G': self.state['G']}
+            return {'A_shape':self.state['A_shape'],'G_shape':self.state['G_shape'],
+            'A': self.state['A'], 'G': self.state['G']}
 
     def load_state_dict(self, state_dict):
         """Loads the KFACLayer state."""
@@ -73,8 +74,12 @@ class KFACLayer(object):
                                '"A" and "G"')
         device = next(self.module.parameters()).device
         self.state = state_dict
+        noTrans = ['A_shape', 'G_shape']
         for key in self.state:
-            self.state[key] = self.state[key].to(device)
+            if key not in noTrans:
+                self.state[key] = self.state[key].to(device)
+        # print(self)
+        # print(self.state['A_shape'])
 
     def assign_inverse_workers(self, compute_A_inv_rank, compute_G_inv_rank,
         broadcast_A_inv_group, broadcast_G_inv_group):

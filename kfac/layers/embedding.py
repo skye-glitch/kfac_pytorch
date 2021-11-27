@@ -247,3 +247,38 @@ class EmbeddingLayer(KFACLayer):
                         group=self.broadcast_G_inv_group))
         return ops
 
+    def state_dict(self, include_inverses=False):
+        """Returns the state of the KFACLayer as a dictionary.
+
+        Used by kfac.KFAC for state saving/loading. Note by default only the
+        factors are saved because the inverses can be recomputed from the
+        factors, however, the `include_inverses` flag can override this. If
+        `keep_inv_copy=False` and `compute_A_inv_rank != compute_G_inv_rank != get_rank()` then
+        the inverses may be `None` because this worker is not responsible for
+        this layer.
+        """
+        if include_inverses:
+            return self.state
+        else:
+            return {'A_shape':self.state['A_shape'], 'A_factor': self.A_factor,
+            'A_inv': self.A_inv, 'G': self.state['G'],
+            'G_shape':self.state['G_shape']}
+
+    def load_state_dict(self, state_dict):
+        """Loads the KFACLayer state."""
+        device = next(self.module.parameters()).device
+        self.state = state_dict
+        notInState = ['A_factor', 'A_inv']
+        noTrans = ['A_shape', 'G_shape']
+            
+        for key in self.state:
+            if key not in notInState:
+                if key not in noTrans:
+                    self.state[key] = self.state[key].to(device)
+            else:
+                if key == 'A_factor':
+                    self.A_factor = self.state[key].to(device)
+                else:
+                     self.A_inv = self.state[key].to(device)
+        for key in notInState:
+            del self.state[key]

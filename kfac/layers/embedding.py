@@ -155,7 +155,7 @@ class EmbeddingLayer(KFACLayer):
             self.state['dG'] = results[1]
             QG = results[0]
             dG = results[1]
-            Ginv = QG @ torch.diag(utils.get_elementwise_inverse(dG)) @ QG.t()
+            Ginv = QG @ torch.diag(utils.get_elementwise_inverse(dG, damping=damping)) @ QG.t()
             self.state['G_inv'] = (Ginv + Ginv.t()) / 2 # there is some tiny pricision errors in fp32
 
 

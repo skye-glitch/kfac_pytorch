@@ -258,7 +258,8 @@ class EmbeddingLayer(KFACLayer):
         this layer.
         """
         if include_inverses:
-            return self.state
+            return {'A_shape':self.state['A_shape'], 'A_factor': self.A_factor, 'A_inv': self.A_inv,
+            'G': self.state['G'], 'G_shape':self.state['G_shape'], 'G_inv': self.G_inv}
         else:
             return {'A_shape':self.state['A_shape'], 'A_factor': self.A_factor,
             'A_inv': self.A_inv, 'G': self.state['G'],

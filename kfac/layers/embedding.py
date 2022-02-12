@@ -66,7 +66,7 @@ class EmbeddingLayer(KFACLayer):
         assert len(a.shape) == 2  # shape should be (batch, vocab_size) where batch dim
                                   # has size batch_size * seq_len
         a = a ** 2
-        return  torch.mean(a, dim=0)
+        return  torch.sun(a, dim=0)/len(a_inputs)
 
     # Implement update_A_factor here...
     #   we should not use base.update_A_factor

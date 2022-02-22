@@ -1,6 +1,9 @@
-import math
+#import math
 import torch
 import warnings
+#add
+#import logging
+#import numpy as np
 
 import kfac
 
@@ -259,8 +262,14 @@ class KFACLayer(object):
             if isinstance(results, tuple):
                 self.state['QA'] = results[0]
                 self.state['dA'] = results[1]
+                # if not torch.isfinite(self.state['QA']).all():
+                #     logging.critical("find inf in self.state['QA']")
+                # if not torch.isfinite(self.state['dA']).all():
+                #     logging.critical("find inf in self.state['dA']")
             else:
                 self.state['A_inv'] = results
+                # if not torch.isfinite(self.state['A_inv']).all():
+                #     logging.critical("find inf in self.state['A_inv']")
 
     def compute_G_inv(self, damping=0.001, ignore_rank=False):
         """Compute G inverse on specified ranks
@@ -304,6 +313,12 @@ class KFACLayer(object):
             if isinstance(results, tuple):
                 self.state['QG'] = results[0]
                 self.state['dG'] = results[1]
+
+                # if not torch.isfinite(self.state['QG']).all():
+                #     logging.critical("find inf in self.state['QG']")
+                # if not torch.isfinite(self.state['dG']).all():
+                #     logging.critical("find inf in self.state['dG']")
+
                 if self.prediv_eigenvalues:
                     if 'dA' not in self.state:
                         raise ValueError('compute_A_inv must be called before '
@@ -311,8 +326,12 @@ class KFACLayer(object):
                                          'is True.')
                     self.state['dGdA'] = 1 / (self.state['dG'].unsqueeze(1) *
                             self.state['dA'].unsqueeze(0) + damping)
+                    # if not torch.isfinite(self.state['dGdA']).all():
+                    #     logging.critical("find inf in self.state['dGdA']")
             else:
                 self.state['G_inv'] = results
+                # if not torch.isfinite(self.state['G_inv']).all():
+                #         logging.critical("find inf in self.state['G_inv']")
 
     def get_gradient(self):
         """Get formated gradients (weight and bias) of module
@@ -391,13 +410,35 @@ class KFACLayer(object):
         """Compute factor A and add to running averages"""
         if len(self.a_inputs) == 0:
             return
+        # for i in self.a_inputs:
+        #     _t = i.cpu()
+        #     if not np.isfinite(_t).all():
+        #         logging.critical("find inf in a_inputs 1 {}".format(self.module))
+        #     break
         self.a_inputs = [x.to(self.factor_dtype) for x in self.a_inputs]
+        # for i in self.a_inputs:
+        #     _t = i.cpu()
+        #     if not np.isfinite(_t).all():
+        #         logging.critical("find inf in a_inputs 2 {}".format(self.module))
+        #     break
         A_new = self._get_A_factor(self.a_inputs)
+        # TODO check A_new inf 
+        # for i in A_new:
+        #     _t = i.cpu()
+        #     if not np.isfinite(_t).all():
+        #         logging.critical("find inf in A_new {}".format(self.module))
+        #     break
         del self.a_inputs[:]  # clear accumulated inputs
         if self.state['A'] is None:
             self.state['A'] = torch.diag(A_new.new(A_new.shape[0]).fill_(1))
             self.state['A_shape'] = A_new.shape
         utils.update_running_avg(A_new, self.state['A'], alpha=alpha)
+        # TODO: check self.state['A']
+        # for i in self.state['A']:
+        #     _t = i.cpu()
+        #     if not np.isfinite(_t).all():
+        #         logging.critical("find inf in self.state['A'] {}".format(self.module))
+        #     break
 
     def update_G_factor(self, alpha=0.95):
         """Compute factor G and add to running averages"""
@@ -417,15 +458,28 @@ class KFACLayer(object):
                               'many gradients are discarded.')
         else:
             self.g_outputs = [x.to(self.factor_dtype) for x in self.g_outputs]
+        
+        
+        # for i in self.g_outputs:
+        #     _t = i.cpu()
+        #     if not np.isfinite(_t).all():
+        #         logging.critical("find inf in self.g_outputs {}".format(self.module))
+        #     break
 
         if len(self.g_outputs) == 0: # or len(self.g_outputs[0]) == 0:
             return
         G_new = self._get_G_factor(self.g_outputs)
+        # if not torch.isfinite(G_new).all():   
+        #     logging.critical("find inf in G_new")
+
         del self.g_outputs[:]  # clear accumulated outputs
         if self.state['G'] is None:
             self.state['G'] = torch.diag(G_new.new(G_new.shape[0]).fill_(1))
             self.state['G_shape'] = G_new.shape
         utils.update_running_avg(G_new, self.state['G'], alpha=alpha)
+        # TODO check
+        # if not torch.isfinite(self.state['G']).all():   
+        #     logging.critical("find inf in self.state['G'], layer is {}".format(self.module))
 
     def update_gradient(self, scale=None):
         """Updates gradients of module with computed precondition gradients"""

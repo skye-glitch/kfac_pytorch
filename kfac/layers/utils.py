@@ -1,4 +1,7 @@
 import torch
+#add
+#import logging
+
 
 
 def append_bias_ones(tensor):
@@ -42,6 +45,7 @@ def get_cov(a, b=None, scale=None):
     else:
         return a.t() @ (b / scale)
 
+
 def get_eigendecomp(tensor, clip=0.0, concat=True, symmetric=True):
     """Compute eigendecomposition of a block.
 
@@ -62,6 +66,7 @@ def get_eigendecomp(tensor, clip=0.0, concat=True, symmetric=True):
     if symmetric:
         #d, Q = torch.symeig(tensor, eigenvectors=True)
         d, Q = torch.linalg.eigh(tensor)
+
     else:
         d, Q = torch.eig(tensor, eigenvectors=True)
         d = d[:, 0]
@@ -89,7 +94,7 @@ def get_inverse(tensor, damping=None, symmetric=True):
     """
     if damping is not None:
         d = tensor.new(tensor.shape[0]).fill_(damping)
-        tensor = tensor + torch.diag(d)
+        tensor += torch.diag(d)
 
     if symmetric:
         return torch.cholesky_inverse(torch.cholesky(tensor))
@@ -99,13 +104,22 @@ def get_inverse(tensor, damping=None, symmetric=True):
 def get_elementwise_inverse(vector, damping=None):
     """Computes the reciprocal of each non-zero element of v"""
     if damping is not None:
-        vector = vector + damping
+        vector += damping
     mask = vector != 0.0
+    # for i in range(len(vector)):
+    #     ele = vector[i]
+    #     if ele < numpy.finfo(float).eps:
+    #         print("encounter 0, mask ", mask[i], i)
+    # print("mask for other ele: ", mask[1])
     reciprocal = vector.clone()
     reciprocal[mask] = torch.reciprocal(reciprocal[mask])
+    # for i in range(len(reciprocal)):
+    #     ele = reciprocal[i]
+    #     if math.isnan(ele):
+    #         print("encounter NaN")
     return reciprocal
 
-def reshape_data(data_list, batch_first=True, collapse_dims=False):
+def reshape_data(data_list, batch_first=True, collapse_dims=False, toflt = False):
     """Concat input/output data and clear buffers
 
     Args:
@@ -122,6 +136,12 @@ def reshape_data(data_list, batch_first=True, collapse_dims=False):
     d = torch.cat(data_list, dim=int(not batch_first))
     if collapse_dims and len(d.shape) > 2:
         d = d.view(-1, d.shape[-1])
+    if toflt and (d[0].dtype is not torch.float32):
+        #print("type casting")
+        #print(d[0].dtype)
+        new_d = d.float()
+        del d
+        d = new_d
     return d
 
 def get_triu(tensor):
@@ -174,6 +194,12 @@ def update_running_avg(new, current, alpha=1.0):
       alpha (float, optional): (default: 1.0)
     """
     if alpha != 1:
-        current *= alpha / (1 - alpha)
-        current += new
-        current *= (1 - alpha)
+        #old = current.clone().detach()
+        # current *= alpha / (1 - alpha)
+        # current += new
+        # current *= (1 - alpha)
+        current *= alpha
+        current += new * (1 - alpha)
+        # if not torch.isfinite(current).all():
+        #     torch.set_printoptions(profile="full")
+        #     logging.critical("old matrix:\n {}, new inp: \n {}, res: \n{}".format(old, new, current))

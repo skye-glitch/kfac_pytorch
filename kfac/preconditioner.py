@@ -477,8 +477,6 @@ class KFAC(optim.Optimizer):
 
     @torch.no_grad()
     def step(self, closure=None):
-    #test code: allreduce
-    #def step(self, closure=None, args=None):
         """Perform one K-FAC step
 
         Note:
@@ -725,6 +723,7 @@ class KFAC(optim.Optimizer):
 
     @_periodic_hook(grad_enabled=True)
     def _save_input(self, module, input):
+        # TODO: call 256 times before preconditioner.step()?
         self.hook_layers[module].save_inputs(input)
         if self.compute_factor_in_hook:
             # We are inside the forward pass which could be in an autocast

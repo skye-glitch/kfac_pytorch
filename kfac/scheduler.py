@@ -32,6 +32,8 @@ class LambdaParamScheduler:
         factor_decay_lambda: Callable[[int], float] | None = None,
         kl_clip_lambda: Callable[[int], float] | None = None,
         lr_lambda: Callable[[int], float] | None = None,
+        #TODO, add params here
+        decay=False,
     ):
         """Init LambdaParamScheduler.
 
@@ -77,6 +79,8 @@ class LambdaParamScheduler:
         self._factor_decay_lambda = factor_decay_lambda
         self._kl_clip_lambda = kl_clip_lambda
         self._lr_lambda = lr_lambda
+        #TODO add weight_decay here
+        self._decay = decay
 
         if self._factor_update_steps_lambda is not None:
             if callable(self._preconditioner._factor_update_steps):
@@ -140,12 +144,17 @@ class LambdaParamScheduler:
             self._preconditioner._inv_update_steps = int(
                 self._preconditioner._inv_update_steps * factor,
             )
-        if self._damping_lambda is not None:
+        #TODO: change the damping function
+        if self._damping_lambda is not None:            
             factor = self._damping_lambda(
                 step if step is not None else self._preconditioner.steps,
             )
             assert not callable(self._preconditioner._damping)
-            self._preconditioner._damping *= factor
+            self._preconditioner._damping *= factor    
+            #todo: is damping wrong?       
+            #print("damping for kfac is {}".format(self._preconditioner._damping))
+
+        
         if self._factor_decay_lambda is not None:
             factor = self._factor_decay_lambda(
                 step if step is not None else self._preconditioner.steps,

@@ -92,22 +92,26 @@ def create_lr_schedule(
     workers: int,
     warmup_epochs: int,
     decay_schedule: list[int],
+    lars: bool = False,
     alpha: float = 0.1,
 ) -> Callable[[int], float]:
     """Return lr scheduler lambda."""
-
-    def lr_schedule(epoch: int) -> float:
-        """Compute lr scale factor."""
-        lr_adj = 1.0
-        if epoch < warmup_epochs:
-            lr_adj = (
-                1.0 / workers * (epoch * (workers - 1) / warmup_epochs + 1)
-            )
-        else:
-            decay_schedule.sort(reverse=True)
-            for e in decay_schedule:
-                if epoch >= e:
-                    lr_adj *= alpha
-        return lr_adj
-
+    #todo: don't need it for lars
+    if lars :
+        def lr_schedule(epoch: int):
+            return 
+    else:
+        def lr_schedule(epoch: int) -> float:
+            """Compute lr scale factor."""
+            lr_adj = 1.0
+            if epoch < warmup_epochs:
+                lr_adj = (
+                    1.0 / workers * (epoch * (workers - 1) / warmup_epochs + 1)
+                )
+            else:
+                decay_schedule.sort(reverse=True)
+                for e in decay_schedule:
+                    if epoch >= e:
+                        lr_adj *= alpha
+            return lr_adj
     return lr_schedule

@@ -44,6 +44,8 @@ class BaseKFACPreconditioner:
         update_factors_in_hook: bool = True,
         defaults: dict[str, Any] | None = None,
         loglevel: int = logging.DEBUG,
+        #TODO
+        decay: bool = False,
     ) -> None:
         """Init KFACBasePreconditioner.
 
@@ -111,6 +113,8 @@ class BaseKFACPreconditioner:
         self._assignment = assignment
         self._damping = damping
         self._defaults = defaults
+        #todo: add new param
+        self._decay = decay
         self._factor_decay = factor_decay
         self._factor_update_steps = factor_update_steps
         self._inv_update_steps = inv_update_steps
@@ -138,6 +142,8 @@ class BaseKFACPreconditioner:
             ('accumulation_steps', self._accumulation_steps),
             ('assignment', self._assignment.__class__.__name__),
             ('damping', self._damping),
+            #TODO, return extra param
+            ('decay', self._decay),
             ('factor_decay', self._factor_decay),
             ('factor_update_steps', self._factor_update_steps),
             ('inv_update_steps', self._inv_update_steps),
@@ -231,6 +237,8 @@ class BaseKFACPreconditioner:
             state_dict['inv_update_steps'] = self._inv_update_steps
         if not callable(self._damping):
             state_dict['damping'] = self._damping
+        #TODO: add extra state param
+        state_dict['decay'] = self._decay
         if not callable(self._factor_decay):
             state_dict['factor_decay'] = self._factor_decay
         if not callable(self._kl_clip):
@@ -266,6 +274,9 @@ class BaseKFACPreconditioner:
             self._inv_update_steps = state_dict['inv_update_steps']
         if 'damping' in state_dict:
             self._damping = state_dict['damping']
+        #TODO: add extra param
+        if 'decay' in state_dict:
+            self._decay = state_dict['decay']
         if 'factor_decay' in state_dict:
             self._factor_decay = state_dict['factor_decay']
         if 'kl_clip' in state_dict:
@@ -318,11 +329,11 @@ class BaseKFACPreconditioner:
             This condition is guarenteed to be true if using the
             `DistributedDataParallel` model wrapper as gradients are
             communicated during `loss.backward()`.
-        """
+        """        
         if (
             not self._update_factors_in_hook
             and self.steps % self.factor_update_steps == 0
-        ):
+        ):          
             for name, layer in reversed(list(self._layers.values())):
                 self._mini_steps[name] = 0
                 layer.update_a_factor(alpha=self.factor_decay)
@@ -426,8 +437,13 @@ class BaseKFACPreconditioner:
             else:
                 v1 = layer.grad.view(w.size())
             vg_sum += (v1 * w * self.lr**2).sum().item()
+            # print("lr ", self.lr)
+            # if vg_sum < 1e-8:
+            #     print("has bias? {} has grad?{} w {} lr {}".format(layer.module.has_bias(), v1, w, self.lr))
             if layer.module.has_bias():
                 vg_sum += (v2 * b * self.lr**2).sum().item()
+            if vg_sum == 0.0:
+                return 1.0
         return min(1.0, math.sqrt(self.kl_clip / abs(vg_sum)))
 
     @torch.no_grad()

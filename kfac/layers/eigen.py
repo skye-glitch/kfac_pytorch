@@ -313,6 +313,7 @@ class KFACEigenLayer(KFACBaseLayer):
         self.dg = self.dg.to(self.inv_dtype)
         self.dg = torch.clamp(self.dg, min=0.0)
         if self.prediv_eigenvalues:
+            #print("using lars damping in prediv eigenvalue {} in eigen.py".format(damping))
             self.dgda = 1 / (torch.outer(self.dg, self.da) + damping)
             self.dg = None
             self.da = None
@@ -345,6 +346,7 @@ class KFACEigenLayer(KFACBaseLayer):
         if self.prediv_eigenvalues:
             v2 = v1 * self.dgda
         else:
+            #print("using lars damping in {} in eigen.py".format(damping))
             v2 = v1 / (
                 torch.outer(
                     cast(torch.Tensor, self.dg),

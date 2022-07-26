@@ -10,6 +10,8 @@ from tqdm import tqdm
 import kfac
 from examples.utils import accuracy
 from examples.utils import Metric
+#TODO, import
+import torch.distributed as dist
 
 
 def train(
@@ -84,7 +86,11 @@ def train(
                     scaler.step(optimizer)
                     scaler.update()
                 else:
-                    optimizer.step()
+                    #todo: some change in optimizer
+                    if args.lars:
+                        optimizer.step(epoch)
+                    else:
+                        optimizer.step()
                 optimizer.zero_grad()
 
                 train_loss.update(step_loss / mini_step)
@@ -96,20 +102,39 @@ def train(
                     'loss: {:.4f}, acc: {:.2f}%, lr: {:.4f}'.format(
                         train_loss.avg,
                         100 * train_accuracy.avg,
-                        optimizer.param_groups[0]['lr'],
+                        #todo: global_lr for lars
+                        optimizer.param_groups[0]['lr'] if not args.lars 
+                        else optimizer.global_lr,
                     ),
                 )
                 t.update(1)
                 mini_step = 0
-
+        #TODO, print local LR
+        # if dist.get_rank() == 0:
+        #     with torch.no_grad():
+        #         idx = 0
+        #         for name,param in model.named_parameters():
+        #             #print(name)
+        #             if "linear" in name or "conv2" in name:
+        #                 param_norm = param.norm()
+        #                 grad_norm = param.grad.norm()
+        #                 factor = param_norm / (grad_norm + 5e-4 * param_norm + 1e-8)  
+        #                 print("layer {}, factor {}, param_norm {}, grad_norm {}".format(idx, factor, param_norm, grad_norm))
+        #                 idx += 1
     if args.log_writer is not None:
         args.log_writer.add_scalar('train/loss', train_loss.avg, epoch)
         args.log_writer.add_scalar('train/accuracy', train_accuracy.avg, epoch)
         args.log_writer.add_scalar(
             'train/lr',
-            optimizer.param_groups[0]['lr'],
+            optimizer.param_groups[0]['lr'] if not args.lars 
+                else optimizer.global_lr,
             epoch,
         )
+        print('epoch', epoch, end = ' ')
+        print('train/loss', train_loss.avg, end = ' ')
+        print('train/accuracy', train_accuracy.avg, end = ' ')
+        print('train/lr',  optimizer.param_groups[0]['lr'] if not args.lars 
+                else optimizer.global_lr, end = ' ')
 
 
 def test(
@@ -151,3 +176,5 @@ def test(
     if args.log_writer is not None:
         args.log_writer.add_scalar('val/loss', val_loss.avg, epoch)
         args.log_writer.add_scalar('val/accuracy', val_accuracy.avg, epoch)
+        print('val/loss', val_loss.avg, end = ' ')
+        print('val/accuracy', val_accuracy.avg)

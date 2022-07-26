@@ -43,7 +43,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         '--checkpoint-format',
-        default='checkpoint_{epoch}.pth.tar',
+        default='checkpoint_trustCoef{trust_coef}_{epoch}.pth.tar',
         help='checkpoint file format',
     )
     parser.add_argument(
@@ -115,6 +115,12 @@ def parse_args() -> argparse.Namespace:
         default=[35, 75, 90],
         help='epoch intervals to decay lr (default: [35, 75, 90])',
     )
+    # parser.add_argument(
+    #     '--sqrt-lr',
+    #     action='store_true',
+    #     default=False,
+    #     help='use sqrt learning rate for lars',
+    # )
     parser.add_argument(
         '--warmup-epochs',
         type=int,
@@ -185,8 +191,33 @@ def parse_args() -> argparse.Namespace:
         '--kfac-damping',
         type=float,
         default=0.003,
-        help='KFAC damping factor (defaultL 0.003)',
+        help='KFAC damping factor (default 0.003)',
     )
+    #TODO: add arguments
+    parser.add_argument(
+        '--decay',
+        default=False, 
+        action='store_true',
+        help='KFAC damping const/decay',
+    )
+    parser.add_argument(
+        '--lars',
+        default=False, 
+        action='store_true',
+        help='use lars',
+    )
+    parser.add_argument(
+        '--trust-coef',
+        type=float,
+        default=0.001,
+        help='trust coefficient for lars',
+    )
+    parser.add_argument(
+        '--eps',
+        type=float,
+        default=1e-8,
+        help='episolum for lars',
+    )  
     parser.add_argument(
         '--kfac-damping-alpha',
         type=float,
@@ -293,6 +324,15 @@ def main() -> None:
     train_sampler, train_loader, _, val_loader = datasets.get_cifar(args)
     model = models.get_model(args.model)
 
+    #TODO: is the model initialized correctly?
+    # if dist.get_rank() == 0:
+    #     with torch.no_grad():
+    #         idx = 0
+    #         for name,param in model.named_parameters():
+    #             #print(name)
+    #             print("idx {} name {} norm {}".format(idx, name, param.norm()))
+    #             idx += 1
+
     device = 'cpu' if not args.cuda else 'cuda'
     model.to(device)
 
@@ -310,7 +350,7 @@ def main() -> None:
 
     args.resume_from_epoch = 0
     for try_epoch in range(args.epochs, 0, -1):
-        if os.path.exists(args.checkpoint_format.format(epoch=try_epoch)):
+        if os.path.exists(args.checkpoint_format.format(trust_coef=args.trust_coef, epoch=try_epoch)):
             args.resume_from_epoch = try_epoch
             break
 
@@ -338,7 +378,8 @@ def main() -> None:
     loss_func = torch.nn.CrossEntropyLoss()
 
     if args.resume_from_epoch > 0:
-        filepath = args.checkpoint_format.format(epoch=args.resume_from_epoch)
+        filepath = args.checkpoint_format.format(trust_coef=args.trust_coef, \
+            epoch=args.resume_from_epoch)
         map_location = {'cuda:0': f'cuda:{args.local_rank}'}
         checkpoint = torch.load(filepath, map_location=map_location)
         model.module.load_state_dict(checkpoint['model'])
@@ -365,9 +406,14 @@ def main() -> None:
             args,
         )
         engine.test(epoch, model, loss_func, val_loader, args)
-        lr_scheduler.step()
+        #TODO: no need to do this if lars
+        if lr_scheduler is not None:
+            lr_scheduler.step()
+
+        
         if kfac_scheduler is not None:
             kfac_scheduler.step(step=epoch)
+            
         if (
             epoch > 0
             and epoch % args.checkpoint_freq == 0
@@ -380,7 +426,8 @@ def main() -> None:
                 optimizer,
                 preconditioner,
                 lr_scheduler,
-                args.checkpoint_format.format(epoch=epoch),
+                args.checkpoint_format.format(trust_coef=args.trust_coef, \
+                    epoch=epoch),
             )
 
     if args.verbose:
@@ -393,3 +440,7 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
+
+
+
+                

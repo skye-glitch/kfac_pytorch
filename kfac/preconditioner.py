@@ -78,6 +78,8 @@ class KFACPreconditioner(BaseKFACPreconditioner):
         skip_layers: list[str] | None = None,
         update_factors_in_hook: bool = True,
         loglevel: int = logging.DEBUG,
+        #TODO, send in extra param
+        decay: bool = False,
     ) -> None:
         """Init KFACPreconditioner.
 
@@ -322,4 +324,6 @@ class KFACPreconditioner(BaseKFACPreconditioner):
             defaults=defaults,
             tdc=self.tdc,
             loglevel=loglevel,
+            #TODO, add extra param
+            decay=decay,
         )

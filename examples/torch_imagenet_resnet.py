@@ -110,8 +110,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         '--base-lr',
         type=float,
-        default=0.0125,
-        help='learning rate for a single GPU (default: 0.0125)',
+        default=0.05,
+        help='learning rate for a single GPU (default: 0.05) for local batch 128',
     )
     parser.add_argument(
         '--lr-decay',
@@ -149,6 +149,25 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=5,
         help='epochs between checkpoints',
+    )
+    #TODO: add arguments
+    parser.add_argument(
+        '--decay',
+        default=False, 
+        action='store_true',
+        help='KFAC damping const/decay',
+    )
+    parser.add_argument(
+        '--lars',
+        default=False, 
+        action='store_true',
+        help='use lars',
+    )
+    parser.add_argument(
+        '--trust-coef',
+        type=float,
+        default=0.001,
+        help='trust coefficient for lars',
     )
 
     # KFAC Parameters
@@ -281,7 +300,10 @@ if __name__ == '__main__':
         # torch.backends.cudnn.deterministic = True
 
     args.base_lr = (
-        args.base_lr * dist.get_world_size() * args.batches_per_allreduce
+        29.0 if dist.get_world_size() * args.batch_size == 32 * 1024 else 
+        # (2.5 if dist.get_world_size() * args.batch_size == 16 * 1024 else
+        # 0.6 if dist.get_world_size() * args.batch_size == 8 * 1024 else
+        args.base_lr * dist.get_world_size() * args.batches_per_allreduce#)
     )
     args.verbose = dist.get_rank() == 0
 
@@ -378,7 +400,9 @@ if __name__ == '__main__':
             args,
         )
         engine.test(epoch, model, loss_func, val_loader, args)
-        lr_scheduler.step()
+        #TODO: no need to do this if lars
+        if lr_scheduler is not None:
+            lr_scheduler.step()
         if kfac_scheduler is not None:
             kfac_scheduler.step(step=epoch)
         if (

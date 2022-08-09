@@ -38,7 +38,11 @@ def get_optimizer(
         weight_decay=args.weight_decay, 
         eta=args.trust_coef,
         max_epoch=args.epochs, 
+        workers=dist.get_world_size(),
+        warmup_epochs=args.warmup_epochs,
     )
+    #print("1 optimizer, ",optimizer)
+    print("lr, ",optimizer.param_groups[0]['lr']) 
     #TODO: add new param
     lrs = create_lr_schedule(
         dist.get_world_size(),
@@ -46,12 +50,13 @@ def get_optimizer(
         args.lr_decay,
         args.lars,
     )
+    #print("2 optimizer, ",optimizer)
     #todo: only need the scheduler for SGD
     lr_scheduler = optim.lr_scheduler.LambdaLR(
         optimizer, lrs
         ) if not args.lars else  None
     
-
+    #print("3 optimizer, ",optimizer)
     grad_worker_fraction: kfac.enums.DistributedStrategy | float
     if args.kfac_strategy == 'comm-opt':
         grad_worker_fraction = kfac.enums.DistributedStrategy.COMM_OPT
@@ -174,7 +179,8 @@ class LARS(Optimizer):
         >>> optimizer.step()
     """
     def __init__(self, params, lr=required, momentum=.9,
-                 weight_decay=.0005, eta=0.001, max_epoch=200):
+                 weight_decay=.0005, eta=0.001, max_epoch=200,
+                 workers=4, warmup_epochs=5):
         if lr is not required and lr < 0.0:
             raise ValueError("Invalid learning rate: {}".format(lr))
         if momentum < 0.0:
@@ -191,7 +197,8 @@ class LARS(Optimizer):
         self.global_lr = 0
         defaults = dict(lr=lr, momentum=momentum,
                         weight_decay=weight_decay,
-                        eta=eta, max_epoch=max_epoch)
+                        eta=eta, max_epoch=max_epoch,
+                        workers=workers, warmup_epochs=warmup_epochs)
         super(LARS, self).__init__(params, defaults)
 
 
@@ -216,6 +223,8 @@ class LARS(Optimizer):
             eta = group['eta']
             lr = group['lr']
             max_epoch = group['max_epoch']
+            warmup_epochs = group['warmup_epochs']
+            workers = group['workers']
             #todo, remove test code
             i = 0
             for p in group['params']:
@@ -228,8 +237,14 @@ class LARS(Optimizer):
                 weight_norm = p.norm()
                 grad_norm = p.grad.norm()
 
-                # Global LR computed on polynomial decay schedule
-                decay = (1 - epoch / max_epoch) ** 2
+                # Global LR warmup + 
+                # computed on polynomial decay schedule
+                if epoch < warmup_epochs:
+                    decay = (
+                        1.0 / workers * (epoch * (workers - 1) / warmup_epochs + 1)
+                    )
+                else:
+                    decay = (1 - epoch / max_epoch) ** 2
                 self.global_lr = lr * decay
 
                 # Compute local learning rate for this layer
@@ -240,9 +255,9 @@ class LARS(Optimizer):
                 actual_lr = local_lr * self.global_lr
                 #todo, remove test code
                 i += 1
-                if dist.get_rank() == 0:
-                    if toPrint and actual_lr.item() > 1e-8:
-                        print("printing actual lr for epoch {}, param {}, {}".format(epoch, i, actual_lr.item()))
+                # if dist.get_rank() == 0:
+                #     if toPrint and actual_lr.item() > 1e-8:
+                #         print("printing actual lr for epoch {}, param {}, {}".format(epoch, i, actual_lr.item()))
                     
 
                 if 'momentum_buffer' not in param_state:

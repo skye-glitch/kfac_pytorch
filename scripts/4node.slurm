@@ -2,7 +2,7 @@
 #SBATCH -A m4207
 #SBATCH -C gpu
 #SBATCH -q regular
-#SBATCH -t 00:00:50
+#SBATCH -t 11:59:59
 #SBATCH -N 4
 #SBATCH --ntasks-per-node=4
 #SBATCH -c 32
@@ -19,8 +19,30 @@ CMD="./scripts/run_imagenet.sh    \
     --train-dir=/pscratch/sd/s/sli/data/ILSVRC2012_img_train/  \
     --val-dir=/pscratch/sd/s/sli/data/ILSVRC2012_img_val/ 
     --batch-size=128 --base-lr=0.05"
-RMCMD="rm /pscratch/sd/s/sli/code/kfac_pytorch/logs/torch_imagenet/2kSGD*"
+RMCMD="rm /pscratch/sd/s/sli/code/kfac_pytorch/logs/torch_imagenet/"
 
+optim_list=('sgd'  'adagrad'  'adam'  'amsgrad'  'adabound'  'amsbound')
+for optim in ${optim_list[@]}
+do
+    CURCMD="$CMD --kfac-inv-update-steps=0 --lr-decay 30 60 80 \
+    --epochs=90 --optim=$optim"
+    CURRM="$RMCMD$optim*"
+    echo $CURCMD
+    $CURCMD   
+    $CURRM
+
+    CURCMD="$CMD --decay --optim=$optim"
+    CURRM="$RMCMD$optim*"
+    echo $CURCMD
+    $CURCMD   
+    $CURRM
+
+    CURCMD="$CMD --optim=$optim"
+    CURRM="$RMCMD$optim*"
+    echo $CURCMD
+    $CURCMD   
+    $CURRM
+done
 
 # CURCMD="$CMD --lars --trust-coef=0.001 \
 # --kfac-inv-update-steps=0 --epochs=90"
@@ -46,11 +68,11 @@ RMCMD="rm /pscratch/sd/s/sli/code/kfac_pytorch/logs/torch_imagenet/2kSGD*"
 # done
 
 #SGD
-CURCMD="$CMD --kfac-inv-update-steps=0 --epochs=90 --lr-decay 30 60 80 \
---checkpoint-format="2kSGD_{epoch}.pth.tar""
-echo $CURCMD
-$CURCMD   
-$RMCMD
+# CURCMD="$CMD --kfac-inv-update-steps=0 --epochs=90 --lr-decay 30 60 80 \
+# --checkpoint-format="2kSGD_{epoch}.pth.tar""
+# echo $CURCMD
+# $CURCMD   
+# $RMCMD
 
 # #LARS
 # CURCMD="$CMD --kfac-inv-update-steps=0 --lars --epochs=90 --trust-coef=0.001"

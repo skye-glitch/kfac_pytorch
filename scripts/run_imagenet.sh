@@ -25,7 +25,7 @@
 PRELOAD+="export LD_LIBRARY_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.9/comm_libs/nccl/lib; "
 PRELOAD+="source /pscratch/sd/s/sli/code/torch-1.11/bin/activate; "
 PRELOAD+="module  --ignore-cache load libfabric; "
-PRELOAD+="module load  pytorch/1.11.0; "
+PRELOAD+="module load  cudatoolkit/11.5; "
 PRELOAD="export OMP_NUM_THREADS=4 ; "
 
 # Arguments to the training script are passed as arguments to this script

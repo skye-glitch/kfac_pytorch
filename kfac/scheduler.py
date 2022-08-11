@@ -146,12 +146,12 @@ class LambdaParamScheduler:
             )
         #TODO: change the damping function
         if self._damping_lambda is not None:            
-            factor = self._damping_lambda(
+            self._damping_lambda(
                 step if step is not None else self._preconditioner.steps,
             )
             assert not callable(self._preconditioner._damping)
-            self._preconditioner._damping *= factor    
-            #todo: is damping wrong?       
+            #todo: is damping wrong?    
+            #todo: remove test code   
             #print("damping for kfac is {}".format(self._preconditioner._damping))
 
         

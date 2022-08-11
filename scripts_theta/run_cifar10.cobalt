@@ -1,0 +1,53 @@
+#!/bin/bash
+#COBALT -t 20
+#COBALT -n 1
+#COBALT -q full-node
+#COBALT -A SuperBERT
+#COBALT -O cifar10_$jobid
+#COBALT -M sli@tacc.utexas.edu
+#COBALT --attrs enable_ssh=1:filesystems=theta-fs0
+
+# trust_coef_list=(0.001 0.003 0.01 0.03 0.1 0.3 0.5 1)
+# weight_decay_lars_list=(0.0001 0.0003 0.0005 0.001 0.003 0.01 0.03 0.1 0.3)
+# for weight_decay_lars in ${weight_decay_lars_list[@]}
+# do
+#     for trust_coef in ${trust_coef_list[@]}
+#     do
+#     ./scripts/run_cifar10.sh --lars --trust-coef=$trust_coef \
+#     --weight-decay-lars=$weight_decay_lars --batch-size=512 --sqrt-lr \
+#     --base-lr=0.4
+#     done
+# done
+# trust_coef_list=(0.01 0.013 0.015 0.02 0.025 0.03)
+# for trust_coef in ${trust_coef_list[@]}
+# do  
+#     ./scripts/run_cifar10.sh --kfac-inv-update-steps=0 \
+#     --batch-size=128 --base-lr=0.1 --epochs=200 --lars --trust-coef=$trust_coef 
+# done
+
+#LARS + KFAC
+./scripts/run_cifar10.sh  --lars --trust-coef=0.02
+rm /projects/SuperBERT/sikanli/kfac_pytorch/logs/torch_cifar10/checkpoint_*
+rm /projects/SuperBERT/sikanli/kfac_pytorch/logs/torch_cifar10/events*
+# #LARS
+# ./scripts/run_cifar10.sh --kfac-inv-update-steps=0 \
+#     --batch-size=128 --base-lr=0.1 --kfac-inv-update-step=0 --epochs=200 --lars --trust-coef=0.02
+# rm /projects/SuperBERT/sikanli/kfac_pytorch/logs/torch_cifar10/checkpoint_*
+# rm /projects/SuperBERT/sikanli/kfac_pytorch/logs/torch_cifar10/events*
+# #SGD
+# ./scripts/run_cifar10.sh --kfac-inv-update-steps=0 \
+#     --batch-size=128 --base-lr=0.1  --kfac-inv-update-step=0 --epochs=200 --lr-decay 100 150
+# rm /projects/SuperBERT/sikanli/kfac_pytorch/logs/torch_cifar10/checkpoint_*
+# rm /projects/SuperBERT/sikanli/kfac_pytorch/logs/torch_cifar10/events*
+# #KFAC
+# ./scripts/run_cifar10.sh
+# rm /projects/SuperBERT/sikanli/kfac_pytorch/logs/torch_cifar10/checkpoint_*
+# rm /projects/SuperBERT/sikanli/kfac_pytorch/logs/torch_cifar10/events*
+# #KFAC + Damping reverse decay
+# ./scripts/run_cifar10.sh --decay
+# rm /projects/SuperBERT/sikanli/kfac_pytorch/logs/torch_cifar10/checkpoint_*
+# rm /projects/SuperBERT/sikanli/kfac_pytorch/logs/torch_cifar10/events*
+# #KFAC + Damping reverse decay + LARS
+# ./scripts/run_cifar10.sh --decay --lars  --trust-coef=0.02
+# rm /projects/SuperBERT/sikanli/kfac_pytorch/logs/torch_cifar10/checkpoint_*
+# rm /projects/SuperBERT/sikanli/kfac_pytorch/logs/torch_cifar10/events*

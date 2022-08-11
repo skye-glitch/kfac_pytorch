@@ -1,0 +1,367 @@
+Collecting env info...
+PyTorch version: 1.11.0
+Is debug build: False
+CUDA used to build PyTorch: 11.3
+ROCM used to build PyTorch: N/A
+
+OS: Ubuntu 20.04.3 LTS (x86_64)
+GCC version: (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0
+Clang version: Could not collect
+CMake version: version 3.19.6
+Libc version: glibc-2.31
+
+Python version: 3.8.5 (default, Sep  4 2020, 07:30:14)  [GCC 7.3.0] (64-bit runtime)
+Python platform: Linux-5.4.0-90-generic-x86_64-with-glibc2.10
+Is CUDA available: True
+CUDA runtime version: 11.4.152
+GPU models and configuration: GPU 0: NVIDIA A100-SXM4-40GB
+Nvidia driver version: 470.82.01
+cuDNN version: Probably one of the following:
+/usr/lib/x86_64-linux-gnu/libcudnn.so.8.3.0
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_infer.so.8.3.0
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_train.so.8.3.0
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_infer.so.8.3.0
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_train.so.8.3.0
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_infer.so.8.3.0
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_train.so.8.3.0
+HIP runtime version: N/A
+MIOpen runtime version: N/A
+
+Versions of relevant libraries:
+[pip3] kfac-pytorch==0.4.1
+[pip3] numpy==1.19.5
+[pip3] torch==1.11.0
+[pip3] torch-summary==1.4.5
+[pip3] torchaudio==0.11.0
+[pip3] torchinfo==1.7.0
+[pip3] torchvision==0.12.0
+[conda] blas                      1.0                         mkl  
+[conda] cudatoolkit               11.3.1               h2bc3f7f_2  
+[conda] ffmpeg                    4.3                  hf484d3e_0    pytorch
+[conda] kfac-pytorch              0.4.1                    pypi_0    pypi
+[conda] magma-cuda113             2.5.2                         1    pytorch
+[conda] mkl                       2021.2.0           h06a4308_296  
+[conda] mkl-include               2021.2.0           h06a4308_296  
+[conda] mkl-service               2.4.0            py38h7f8727e_0  
+[conda] mkl_fft                   1.3.0            py38h42c9631_2  
+[conda] mkl_random                1.2.2            py38h51133e4_0  
+[conda] numpy                     1.19.5                   pypi_0    pypi
+[conda] pytorch                   1.11.0          py3.8_cuda11.3_cudnn8.2.0_0    pytorch
+[conda] pytorch-mutex             1.0                        cuda    pytorch
+[conda] torch                     1.11.0                   pypi_0    pypi
+[conda] torch-summary             1.4.5                    pypi_0    pypi
+[conda] torchaudio                0.11.0               py38_cu113    pytorch
+[conda] torchinfo                 1.7.0                    pypi_0    pypi
+[conda] torchvision               0.10.0                   pypi_0    pypi
+
+Global rank 0 initialized: local_rank = 0, world_size = 1
+Files already downloaded and verified
+Files already downloaded and verified
+==========================================================================================
+Layer (type:depth-idx)                   Output Shape              Param #
+==========================================================================================
+ResNet                                   [128, 10]                 --
+├─Conv2d: 1-1                            [128, 16, 32, 32]         432
+├─BatchNorm2d: 1-2                       [128, 16, 32, 32]         32
+├─Sequential: 1-3                        [128, 16, 32, 32]         --
+│    └─BasicBlock: 2-1                   [128, 16, 32, 32]         --
+│    │    └─Conv2d: 3-1                  [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-2             [128, 16, 32, 32]         32
+│    │    └─Conv2d: 3-3                  [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-4             [128, 16, 32, 32]         32
+│    │    └─Sequential: 3-5              [128, 16, 32, 32]         --
+│    └─BasicBlock: 2-2                   [128, 16, 32, 32]         --
+│    │    └─Conv2d: 3-6                  [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-7             [128, 16, 32, 32]         32
+│    │    └─Conv2d: 3-8                  [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-9             [128, 16, 32, 32]         32
+│    │    └─Sequential: 3-10             [128, 16, 32, 32]         --
+│    └─BasicBlock: 2-3                   [128, 16, 32, 32]         --
+│    │    └─Conv2d: 3-11                 [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-12            [128, 16, 32, 32]         32
+│    │    └─Conv2d: 3-13                 [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-14            [128, 16, 32, 32]         32
+│    │    └─Sequential: 3-15             [128, 16, 32, 32]         --
+│    └─BasicBlock: 2-4                   [128, 16, 32, 32]         --
+│    │    └─Conv2d: 3-16                 [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-17            [128, 16, 32, 32]         32
+│    │    └─Conv2d: 3-18                 [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-19            [128, 16, 32, 32]         32
+│    │    └─Sequential: 3-20             [128, 16, 32, 32]         --
+│    └─BasicBlock: 2-5                   [128, 16, 32, 32]         --
+│    │    └─Conv2d: 3-21                 [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-22            [128, 16, 32, 32]         32
+│    │    └─Conv2d: 3-23                 [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-24            [128, 16, 32, 32]         32
+│    │    └─Sequential: 3-25             [128, 16, 32, 32]         --
+├─Sequential: 1-4                        [128, 32, 16, 16]         --
+│    └─BasicBlock: 2-6                   [128, 32, 16, 16]         --
+│    │    └─Conv2d: 3-26                 [128, 32, 16, 16]         4,608
+│    │    └─BatchNorm2d: 3-27            [128, 32, 16, 16]         64
+│    │    └─Conv2d: 3-28                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-29            [128, 32, 16, 16]         64
+│    │    └─LambdaLayer: 3-30            [128, 32, 16, 16]         --
+│    └─BasicBlock: 2-7                   [128, 32, 16, 16]         --
+│    │    └─Conv2d: 3-31                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-32            [128, 32, 16, 16]         64
+│    │    └─Conv2d: 3-33                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-34            [128, 32, 16, 16]         64
+│    │    └─Sequential: 3-35             [128, 32, 16, 16]         --
+│    └─BasicBlock: 2-8                   [128, 32, 16, 16]         --
+│    │    └─Conv2d: 3-36                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-37            [128, 32, 16, 16]         64
+│    │    └─Conv2d: 3-38                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-39            [128, 32, 16, 16]         64
+│    │    └─Sequential: 3-40             [128, 32, 16, 16]         --
+│    └─BasicBlock: 2-9                   [128, 32, 16, 16]         --
+│    │    └─Conv2d: 3-41                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-42            [128, 32, 16, 16]         64
+│    │    └─Conv2d: 3-43                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-44            [128, 32, 16, 16]         64
+│    │    └─Sequential: 3-45             [128, 32, 16, 16]         --
+│    └─BasicBlock: 2-10                  [128, 32, 16, 16]         --
+│    │    └─Conv2d: 3-46                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-47            [128, 32, 16, 16]         64
+│    │    └─Conv2d: 3-48                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-49            [128, 32, 16, 16]         64
+│    │    └─Sequential: 3-50             [128, 32, 16, 16]         --
+├─Sequential: 1-5                        [128, 64, 8, 8]           --
+│    └─BasicBlock: 2-11                  [128, 64, 8, 8]           --
+│    │    └─Conv2d: 3-51                 [128, 64, 8, 8]           18,432
+│    │    └─BatchNorm2d: 3-52            [128, 64, 8, 8]           128
+│    │    └─Conv2d: 3-53                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-54            [128, 64, 8, 8]           128
+│    │    └─LambdaLayer: 3-55            [128, 64, 8, 8]           --
+│    └─BasicBlock: 2-12                  [128, 64, 8, 8]           --
+│    │    └─Conv2d: 3-56                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-57            [128, 64, 8, 8]           128
+│    │    └─Conv2d: 3-58                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-59            [128, 64, 8, 8]           128
+│    │    └─Sequential: 3-60             [128, 64, 8, 8]           --
+│    └─BasicBlock: 2-13                  [128, 64, 8, 8]           --
+│    │    └─Conv2d: 3-61                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-62            [128, 64, 8, 8]           128
+│    │    └─Conv2d: 3-63                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-64            [128, 64, 8, 8]           128
+│    │    └─Sequential: 3-65             [128, 64, 8, 8]           --
+│    └─BasicBlock: 2-14                  [128, 64, 8, 8]           --
+│    │    └─Conv2d: 3-66                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-67            [128, 64, 8, 8]           128
+│    │    └─Conv2d: 3-68                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-69            [128, 64, 8, 8]           128
+│    │    └─Sequential: 3-70             [128, 64, 8, 8]           --
+│    └─BasicBlock: 2-15                  [128, 64, 8, 8]           --
+│    │    └─Conv2d: 3-71                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-72            [128, 64, 8, 8]           128
+│    │    └─Conv2d: 3-73                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-74            [128, 64, 8, 8]           128
+│    │    └─Sequential: 3-75             [128, 64, 8, 8]           --
+├─Linear: 1-6                            [128, 10]                 650
+==========================================================================================
+Total params: 464,154
+Trainable params: 464,154
+Non-trainable params: 0
+Total mult-adds (G): 8.81
+==========================================================================================
+Input size (MB): 1.57
+Forward/backward pass size (MB): 620.77
+Params size (MB): 1.86
+Estimated Total Size (MB): 624.20
+==========================================================================================
+weight_decay 0.0005, trust_coef 0.001, damping 0.003
+KFACPreconditioner(
+  accumulation_steps=1,
+  allreduce_bucket_cap_mb=25,
+  allreduce_method=AllreduceMethod.ALLREDUCE_BUCKETED,
+  assignment=KAISAAssignment,
+  assignment_strategy=AssignmentStrategy.COMPUTE,
+  colocate_factors=True,
+  compute_eigenvalue_outer_product=True,
+  compute_method=ComputeMethod.EIGEN,
+  damping=tensor([0.0030, 0.0030, 0.0030, 0.0030, 0.0030, 0.0030, 0.0030, 0.0030, 0.0030,
+        0.0030, 0.0030, 0.0030, 0.0030, 0.0030, 0.0030, 0.0030, 0.0030, 0.0030,
+        0.0030, 0.0030, 0.0030, 0.0030, 0.0030, 0.0030, 0.0030, 0.0030, 0.0030,
+        0.0030, 0.0030, 0.0030, 0.0030, 0.0030]),
+  distributed_strategy=DistributedStrategy.COMM_OPT,
+  factor_decay=0.95,
+  factor_dtype=None,
+  factor_update_steps=1,
+  grad_scaler=False,
+  grad_worker_fraction=1.0,
+  inv_dtype=torch.float32,
+  inv_update_steps=10,
+  kl_clip=0.001,
+  lars=True,
+  layers=32,
+  loglevel=10,
+  lr=<function get_optimizer.<locals>.<lambda> at 0x7ff7ae108550>,
+  skip_layers=[],
+  steps=0,
+  symmetry_aware=False,
+  update_factors_in_hook=True,
+)
+epoch 51 train/loss tensor(1.0753) train/accuracy tensor(0.8439) train/lr 0.010000000000000002 val/loss tensor(1.7195) val/accuracy tensor(0.8073)
+layer 0, factor is 2.6208283088635653e-05 in optimizer.py
+layer 1, factor is 2.314644370926544e-05 in optimizer.py
+layer 2, factor is 2.7428011890151538e-05 in optimizer.py
+layer 3, factor is 3.280617238488048e-05 in optimizer.py
+layer 4, factor is 2.9076549253659323e-05 in optimizer.py
+layer 5, factor is 2.7981737730442546e-05 in optimizer.py
+layer 6, factor is 3.1245006539393216e-05 in optimizer.py
+layer 7, factor is 2.8358494091662578e-05 in optimizer.py
+layer 8, factor is 2.3212365704239346e-05 in optimizer.py
+layer 9, factor is 3.3527627238072455e-05 in optimizer.py
+layer 10, factor is 3.483982436591759e-05 in optimizer.py
+layer 11, factor is 3.6052970244782045e-05 in optimizer.py
+layer 12, factor is 3.1345531169790775e-05 in optimizer.py
+layer 13, factor is 2.4542427127016708e-05 in optimizer.py
+layer 14, factor is 2.941737329820171e-05 in optimizer.py
+layer 15, factor is 2.987501102325041e-05 in optimizer.py
+layer 16, factor is 2.868141200451646e-05 in optimizer.py
+layer 17, factor is 2.6784213332575746e-05 in optimizer.py
+layer 18, factor is 3.1147337722359225e-05 in optimizer.py
+layer 19, factor is 2.7273759769741446e-05 in optimizer.py
+layer 20, factor is 2.5724708393681794e-05 in optimizer.py
+layer 21, factor is 2.6479316147742793e-05 in optimizer.py
+layer 22, factor is 2.5993478629970923e-05 in optimizer.py
+layer 23, factor is 2.7816928195534274e-05 in optimizer.py
+layer 24, factor is 2.227558616141323e-05 in optimizer.py
+layer 25, factor is 2.3212625819724053e-05 in optimizer.py
+layer 26, factor is 2.367680826864671e-05 in optimizer.py
+layer 27, factor is 2.147509076166898e-05 in optimizer.py
+layer 28, factor is 2.3524520656792447e-05 in optimizer.py
+layer 29, factor is 2.516666972951498e-05 in optimizer.py
+layer 30, factor is 2.2443115085479803e-05 in optimizer.py
+layer 31, factor is 1.1300580808892846e-05 in optimizer.py
+epoch 52 train/loss tensor(1.0237) train/accuracy tensor(0.8475) train/lr 0.010000000000000002 val/loss tensor(0.9402) val/accuracy tensor(0.8491)
+layer 0, factor is 2.2550642825081013e-05 in optimizer.py
+layer 1, factor is 2.196900277340319e-05 in optimizer.py
+layer 2, factor is 2.718322502914816e-05 in optimizer.py
+layer 3, factor is 2.9459737561410293e-05 in optimizer.py
+layer 4, factor is 3.2180283596972004e-05 in optimizer.py
+layer 5, factor is 2.6380757844890468e-05 in optimizer.py
+layer 6, factor is 2.7119527658214793e-05 in optimizer.py
+layer 7, factor is 3.622379881562665e-05 in optimizer.py
+layer 8, factor is 3.51288981619291e-05 in optimizer.py
+layer 9, factor is 4.315068508731201e-05 in optimizer.py
+layer 10, factor is 4.888341572950594e-05 in optimizer.py
+layer 11, factor is 4.238359542796388e-05 in optimizer.py
+layer 12, factor is 3.6190682294545695e-05 in optimizer.py
+layer 13, factor is 2.823657814587932e-05 in optimizer.py
+layer 14, factor is 3.6628585803555325e-05 in optimizer.py
+layer 15, factor is 3.426790499361232e-05 in optimizer.py
+layer 16, factor is 3.5734916309593245e-05 in optimizer.py
+layer 17, factor is 2.396855052211322e-05 in optimizer.py
+layer 18, factor is 3.2495659979758784e-05 in optimizer.py
+layer 19, factor is 2.9999982871231623e-05 in optimizer.py
+layer 20, factor is 3.276835923315957e-05 in optimizer.py
+layer 21, factor is 3.453934914432466e-05 in optimizer.py
+layer 22, factor is 3.5158274840796366e-05 in optimizer.py
+layer 23, factor is 3.860082870232873e-05 in optimizer.py
+layer 24, factor is 3.0250230338424444e-05 in optimizer.py
+layer 25, factor is 3.291121174697764e-05 in optimizer.py
+layer 26, factor is 3.2872903830138966e-05 in optimizer.py
+layer 27, factor is 2.6916985007119365e-05 in optimizer.py
+layer 28, factor is 3.0272765798144974e-05 in optimizer.py
+layer 29, factor is 2.5924025976564735e-05 in optimizer.py
+layer 30, factor is 2.5593521058908664e-05 in optimizer.py
+layer 31, factor is 1.2919142136524897e-05 in optimizer.py
+epoch 53 train/loss tensor(1.0643) train/accuracy tensor(0.8498) train/lr 0.010000000000000002 val/loss tensor(1.3382) val/accuracy tensor(0.8209)
+layer 0, factor is 2.4014414520934224e-05 in optimizer.py
+layer 1, factor is 2.0909274098812602e-05 in optimizer.py
+layer 2, factor is 2.5613035177229904e-05 in optimizer.py
+layer 3, factor is 2.3250762751558796e-05 in optimizer.py
+layer 4, factor is 2.5341985747218132e-05 in optimizer.py
+layer 5, factor is 2.20402107515838e-05 in optimizer.py
+layer 6, factor is 2.4111190214171074e-05 in optimizer.py
+layer 7, factor is 2.5245108190574683e-05 in optimizer.py
+layer 8, factor is 3.230799120501615e-05 in optimizer.py
+layer 9, factor is 2.754808883764781e-05 in optimizer.py
+layer 10, factor is 3.9362654206342995e-05 in optimizer.py
+layer 11, factor is 2.8593734896276146e-05 in optimizer.py
+layer 12, factor is 2.746913924056571e-05 in optimizer.py
+layer 13, factor is 2.2192689357325435e-05 in optimizer.py
+layer 14, factor is 2.902340747823473e-05 in optimizer.py
+layer 15, factor is 2.5523615477140993e-05 in optimizer.py
+layer 16, factor is 2.7096017220173962e-05 in optimizer.py
+layer 17, factor is 1.9676999727380462e-05 in optimizer.py
+layer 18, factor is 2.3237525965669192e-05 in optimizer.py
+layer 19, factor is 2.641639184730593e-05 in optimizer.py
+layer 20, factor is 2.9077853469061665e-05 in optimizer.py
+layer 21, factor is 2.860747554223053e-05 in optimizer.py
+layer 22, factor is 2.8723176001221873e-05 in optimizer.py
+layer 23, factor is 3.281174576841295e-05 in optimizer.py
+layer 24, factor is 2.8363510864437558e-05 in optimizer.py
+layer 25, factor is 2.6875837647821754e-05 in optimizer.py
+layer 26, factor is 2.692444650165271e-05 in optimizer.py
+layer 27, factor is 2.38032553170342e-05 in optimizer.py
+layer 28, factor is 2.7316846171743236e-05 in optimizer.py
+layer 29, factor is 2.2772890588385053e-05 in optimizer.py
+layer 30, factor is 2.4500339350197464e-05 in optimizer.py
+layer 31, factor is 1.1060311408073176e-05 in optimizer.py
+epoch 54 train/loss tensor(1.1059) train/accuracy tensor(0.8481) train/lr 0.010000000000000002 val/loss tensor(2.5157) val/accuracy tensor(0.7698)
+layer 0, factor is 2.5670880859252065e-05 in optimizer.py
+layer 1, factor is 2.071576818707399e-05 in optimizer.py
+layer 2, factor is 2.4663271688041277e-05 in optimizer.py
+layer 3, factor is 1.8334731066715904e-05 in optimizer.py
+layer 4, factor is 1.898063055705279e-05 in optimizer.py
+layer 5, factor is 1.8417451428831555e-05 in optimizer.py
+layer 6, factor is 2.11530968954321e-05 in optimizer.py
+layer 7, factor is 2.2835598429082893e-05 in optimizer.py
+layer 8, factor is 2.7852771381731145e-05 in optimizer.py
+layer 9, factor is 2.4389733880525455e-05 in optimizer.py
+layer 10, factor is 3.082292096223682e-05 in optimizer.py
+layer 11, factor is 2.0655890693888068e-05 in optimizer.py
+layer 12, factor is 2.0623294403776526e-05 in optimizer.py
+layer 13, factor is 1.775446617102716e-05 in optimizer.py
+layer 14, factor is 2.3458138457499444e-05 in optimizer.py
+layer 15, factor is 1.7326014130958356e-05 in optimizer.py
+layer 16, factor is 1.916518340294715e-05 in optimizer.py
+layer 17, factor is 1.870814048743341e-05 in optimizer.py
+layer 18, factor is 2.0754974684678018e-05 in optimizer.py
+layer 19, factor is 2.091161695716437e-05 in optimizer.py
+layer 20, factor is 2.2147109120851383e-05 in optimizer.py
+layer 21, factor is 2.3766537196934223e-05 in optimizer.py
+layer 22, factor is 2.383468563493807e-05 in optimizer.py
+layer 23, factor is 2.6061328753712587e-05 in optimizer.py
+layer 24, factor is 2.371375376242213e-05 in optimizer.py
+layer 25, factor is 2.2768470444134437e-05 in optimizer.py
+layer 26, factor is 2.1479776478372514e-05 in optimizer.py
+layer 27, factor is 1.8016935428022407e-05 in optimizer.py
+layer 28, factor is 2.157973540306557e-05 in optimizer.py
+layer 29, factor is 1.898839218483772e-05 in optimizer.py
+layer 30, factor is 2.1305108020897023e-05 in optimizer.py
+layer 31, factor is 9.718786714074668e-06 in optimizer.py
+epoch 55 train/loss tensor(1.1312) train/accuracy tensor(0.8455) train/lr 0.010000000000000002 val/loss tensor(2.4075) val/accuracy tensor(0.7752)
+layer 0, factor is 2.5043646019184962e-05 in optimizer.py
+layer 1, factor is 2.233590930700302e-05 in optimizer.py
+layer 2, factor is 2.3522319679614156e-05 in optimizer.py
+layer 3, factor is 1.8862569049815647e-05 in optimizer.py
+layer 4, factor is 1.7735032088239677e-05 in optimizer.py
+layer 5, factor is 2.030258474405855e-05 in optimizer.py
+layer 6, factor is 2.173365828639362e-05 in optimizer.py
+layer 7, factor is 2.1082892999402247e-05 in optimizer.py
+layer 8, factor is 2.527695869503077e-05 in optimizer.py
+layer 9, factor is 2.2970885765971616e-05 in optimizer.py
+layer 10, factor is 2.837170904967934e-05 in optimizer.py
+layer 11, factor is 1.992468060052488e-05 in optimizer.py
+layer 12, factor is 1.9415216229390353e-05 in optimizer.py
+layer 13, factor is 1.7095388102461584e-05 in optimizer.py
+layer 14, factor is 2.060149381577503e-05 in optimizer.py
+layer 15, factor is 1.6295212844852358e-05 in optimizer.py
+layer 16, factor is 1.8148228264180943e-05 in optimizer.py
+layer 17, factor is 2.1337878933991306e-05 in optimizer.py
+layer 18, factor is 2.221882823505439e-05 in optimizer.py
+layer 19, factor is 1.8666411051526666e-05 in optimizer.py
+layer 20, factor is 1.742767017276492e-05 in optimizer.py
+layer 21, factor is 2.0768171452800743e-05 in optimizer.py
+layer 22, factor is 2.1023499357397668e-05 in optimizer.py
+layer 23, factor is 2.0126637537032366e-05 in optimizer.py
+layer 24, factor is 1.9535840692697093e-05 in optimizer.py
+layer 25, factor is 1.8822420315700583e-05 in optimizer.py
+layer 26, factor is 1.8664683011593297e-05 in optimizer.py
+layer 27, factor is 1.5048849490995053e-05 in optimizer.py
+layer 28, factor is 1.7422025848645717e-05 in optimizer.py
+layer 29, factor is 1.7878868675325066e-05 in optimizer.py
+layer 30, factor is 1.8252279915031977e-05 in optimizer.py
+layer 31, factor is 9.461893569095992e-06 in optimizer.py

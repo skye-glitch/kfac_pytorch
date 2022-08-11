@@ -1,0 +1,1710 @@
+Collecting env info...
+PyTorch version: 1.11.0
+Is debug build: False
+CUDA used to build PyTorch: 11.3
+ROCM used to build PyTorch: N/A
+
+OS: Ubuntu 20.04.4 LTS (x86_64)
+GCC version: (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
+Clang version: Could not collect
+CMake version: version 3.19.6
+Libc version: glibc-2.31
+
+Python version: 3.8.5 (default, Sep  4 2020, 07:30:14)  [GCC 7.3.0] (64-bit runtime)
+Python platform: Linux-5.4.0-121-generic-x86_64-with-glibc2.10
+Is CUDA available: True
+CUDA runtime version: 11.4.152
+GPU models and configuration: 
+GPU 0: NVIDIA A100-SXM4-40GB
+GPU 1: NVIDIA A100-SXM4-40GB
+GPU 2: NVIDIA A100-SXM4-40GB
+GPU 3: NVIDIA A100-SXM4-40GB
+GPU 4: NVIDIA A100-SXM4-40GB
+GPU 5: NVIDIA A100-SXM4-40GB
+GPU 6: NVIDIA A100-SXM4-40GB
+GPU 7: NVIDIA A100-SXM4-40GB
+
+Nvidia driver version: 470.129.06
+cuDNN version: Probably one of the following:
+/usr/lib/x86_64-linux-gnu/libcudnn.so.8.4.1
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_infer.so.8.4.1
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_train.so.8.4.1
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_infer.so.8.4.1
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_train.so.8.4.1
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_infer.so.8.4.1
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_train.so.8.4.1
+HIP runtime version: N/A
+MIOpen runtime version: N/A
+
+Versions of relevant libraries:
+[pip3] kfac-pytorch==0.4.1
+[pip3] numpy==1.19.5
+[pip3] torch==1.11.0
+[pip3] torch-summary==1.4.5
+[pip3] torchaudio==0.11.0
+[pip3] torchinfo==1.7.0
+[pip3] torchvision==0.12.0
+[conda] blas                      1.0                         mkl  
+[conda] cudatoolkit               11.3.1               h2bc3f7f_2  
+[conda] ffmpeg                    4.3                  hf484d3e_0    pytorch
+[conda] kfac-pytorch              0.4.1                    pypi_0    pypi
+[conda] magma-cuda113             2.5.2                         1    pytorch
+[conda] mkl                       2021.2.0           h06a4308_296  
+[conda] mkl-include               2021.2.0           h06a4308_296  
+[conda] mkl-service               2.4.0            py38h7f8727e_0  
+[conda] mkl_fft                   1.3.0            py38h42c9631_2  
+[conda] mkl_random                1.2.2            py38h51133e4_0  
+[conda] numpy                     1.19.5                   pypi_0    pypi
+[conda] pytorch                   1.11.0          py3.8_cuda11.3_cudnn8.2.0_0    pytorch
+[conda] pytorch-mutex             1.0                        cuda    pytorch
+[conda] torch                     1.11.0                   pypi_0    pypi
+[conda] torch-summary             1.4.5                    pypi_0    pypi
+[conda] torchaudio                0.11.0               py38_cu113    pytorch
+[conda] torchinfo                 1.7.0                    pypi_0    pypi
+[conda] torchvision               0.10.0                   pypi_0    pypi
+
+Global rank 0 initialized: local_rank = 0, world_size = 8
+Global rank 1 initialized: local_rank = 1, world_size = 8
+Global rank 2 initialized: local_rank = 2, world_size = 8
+Global rank 3 initialized: local_rank = 3, world_size = 8
+Global rank 4 initialized: local_rank = 4, world_size = 8
+Global rank 5 initialized: local_rank = 5, world_size = 8
+Global rank 6 initialized: local_rank = 6, world_size = 8
+Global rank 7 initialized: local_rank = 7, world_size = 8
+Files already downloaded and verified
+Files already downloaded and verified
+==========================================================================================
+Layer (type:depth-idx)                   Output Shape              Param #
+==========================================================================================
+ResNet                                   [128, 10]                 --
+├─Conv2d: 1-1                            [128, 16, 32, 32]         432
+├─BatchNorm2d: 1-2                       [128, 16, 32, 32]         32
+├─Sequential: 1-3                        [128, 16, 32, 32]         --
+│    └─BasicBlock: 2-1                   [128, 16, 32, 32]         --
+│    │    └─Conv2d: 3-1                  [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-2             [128, 16, 32, 32]         32
+│    │    └─Conv2d: 3-3                  [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-4             [128, 16, 32, 32]         32
+│    │    └─Sequential: 3-5              [128, 16, 32, 32]         --
+│    └─BasicBlock: 2-2                   [128, 16, 32, 32]         --
+│    │    └─Conv2d: 3-6                  [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-7             [128, 16, 32, 32]         32
+│    │    └─Conv2d: 3-8                  [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-9             [128, 16, 32, 32]         32
+│    │    └─Sequential: 3-10             [128, 16, 32, 32]         --
+│    └─BasicBlock: 2-3                   [128, 16, 32, 32]         --
+│    │    └─Conv2d: 3-11                 [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-12            [128, 16, 32, 32]         32
+│    │    └─Conv2d: 3-13                 [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-14            [128, 16, 32, 32]         32
+│    │    └─Sequential: 3-15             [128, 16, 32, 32]         --
+│    └─BasicBlock: 2-4                   [128, 16, 32, 32]         --
+│    │    └─Conv2d: 3-16                 [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-17            [128, 16, 32, 32]         32
+│    │    └─Conv2d: 3-18                 [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-19            [128, 16, 32, 32]         32
+│    │    └─Sequential: 3-20             [128, 16, 32, 32]         --
+│    └─BasicBlock: 2-5                   [128, 16, 32, 32]         --
+│    │    └─Conv2d: 3-21                 [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-22            [128, 16, 32, 32]         32
+│    │    └─Conv2d: 3-23                 [128, 16, 32, 32]         2,304
+│    │    └─BatchNorm2d: 3-24            [128, 16, 32, 32]         32
+│    │    └─Sequential: 3-25             [128, 16, 32, 32]         --
+├─Sequential: 1-4                        [128, 32, 16, 16]         --
+│    └─BasicBlock: 2-6                   [128, 32, 16, 16]         --
+│    │    └─Conv2d: 3-26                 [128, 32, 16, 16]         4,608
+│    │    └─BatchNorm2d: 3-27            [128, 32, 16, 16]         64
+│    │    └─Conv2d: 3-28                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-29            [128, 32, 16, 16]         64
+│    │    └─LambdaLayer: 3-30            [128, 32, 16, 16]         --
+│    └─BasicBlock: 2-7                   [128, 32, 16, 16]         --
+│    │    └─Conv2d: 3-31                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-32            [128, 32, 16, 16]         64
+│    │    └─Conv2d: 3-33                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-34            [128, 32, 16, 16]         64
+│    │    └─Sequential: 3-35             [128, 32, 16, 16]         --
+│    └─BasicBlock: 2-8                   [128, 32, 16, 16]         --
+│    │    └─Conv2d: 3-36                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-37            [128, 32, 16, 16]         64
+│    │    └─Conv2d: 3-38                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-39            [128, 32, 16, 16]         64
+│    │    └─Sequential: 3-40             [128, 32, 16, 16]         --
+│    └─BasicBlock: 2-9                   [128, 32, 16, 16]         --
+│    │    └─Conv2d: 3-41                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-42            [128, 32, 16, 16]         64
+│    │    └─Conv2d: 3-43                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-44            [128, 32, 16, 16]         64
+│    │    └─Sequential: 3-45             [128, 32, 16, 16]         --
+│    └─BasicBlock: 2-10                  [128, 32, 16, 16]         --
+│    │    └─Conv2d: 3-46                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-47            [128, 32, 16, 16]         64
+│    │    └─Conv2d: 3-48                 [128, 32, 16, 16]         9,216
+│    │    └─BatchNorm2d: 3-49            [128, 32, 16, 16]         64
+│    │    └─Sequential: 3-50             [128, 32, 16, 16]         --
+├─Sequential: 1-5                        [128, 64, 8, 8]           --
+│    └─BasicBlock: 2-11                  [128, 64, 8, 8]           --
+│    │    └─Conv2d: 3-51                 [128, 64, 8, 8]           18,432
+│    │    └─BatchNorm2d: 3-52            [128, 64, 8, 8]           128
+│    │    └─Conv2d: 3-53                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-54            [128, 64, 8, 8]           128
+│    │    └─LambdaLayer: 3-55            [128, 64, 8, 8]           --
+│    └─BasicBlock: 2-12                  [128, 64, 8, 8]           --
+│    │    └─Conv2d: 3-56                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-57            [128, 64, 8, 8]           128
+│    │    └─Conv2d: 3-58                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-59            [128, 64, 8, 8]           128
+│    │    └─Sequential: 3-60             [128, 64, 8, 8]           --
+│    └─BasicBlock: 2-13                  [128, 64, 8, 8]           --
+│    │    └─Conv2d: 3-61                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-62            [128, 64, 8, 8]           128
+│    │    └─Conv2d: 3-63                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-64            [128, 64, 8, 8]           128
+│    │    └─Sequential: 3-65             [128, 64, 8, 8]           --
+│    └─BasicBlock: 2-14                  [128, 64, 8, 8]           --
+│    │    └─Conv2d: 3-66                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-67            [128, 64, 8, 8]           128
+│    │    └─Conv2d: 3-68                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-69            [128, 64, 8, 8]           128
+│    │    └─Sequential: 3-70             [128, 64, 8, 8]           --
+│    └─BasicBlock: 2-15                  [128, 64, 8, 8]           --
+│    │    └─Conv2d: 3-71                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-72            [128, 64, 8, 8]           128
+│    │    └─Conv2d: 3-73                 [128, 64, 8, 8]           36,864
+│    │    └─BatchNorm2d: 3-74            [128, 64, 8, 8]           128
+│    │    └─Sequential: 3-75             [128, 64, 8, 8]           --
+├─Linear: 1-6                            [128, 10]                 650
+==========================================================================================
+Total params: 464,154
+Trainable params: 464,154
+Non-trainable params: 0
+Total mult-adds (G): 8.81
+==========================================================================================
+Input size (MB): 1.57
+Forward/backward pass size (MB): 620.77
+Params size (MB): 1.86
+Estimated Total Size (MB): 624.20
+==========================================================================================
+KFACPreconditioner(
+  accumulation_steps=1,
+  allreduce_bucket_cap_mb=25,
+  allreduce_method=AllreduceMethod.ALLREDUCE_BUCKETED,
+  assignment=KAISAAssignment,
+  assignment_strategy=AssignmentStrategy.COMPUTE,
+  colocate_factors=True,
+  compute_eigenvalue_outer_product=True,
+  compute_method=ComputeMethod.EIGEN,
+  damping=0.003,
+  decay=True,
+  distributed_strategy=DistributedStrategy.COMM_OPT,
+  factor_decay=0.95,
+  factor_dtype=None,
+  factor_update_steps=1,
+  grad_scaler=False,
+  grad_worker_fraction=1.0,
+  inv_dtype=torch.float32,
+  inv_update_steps=10,
+  kl_clip=0.001,
+  layers=32,
+  loglevel=10,
+  lr=<function get_optimizer.<locals>.<lambda> at 0x7f6ab0803e50>,
+  skip_layers=[],
+  steps=0,
+  symmetry_aware=False,
+  update_factors_in_hook=True,
+)
+printing actual lr for epoch 1, param 10, 0.25864169001579285
+printing actual lr for epoch 1, param 20, 1.1923224925994873
+printing actual lr for epoch 1, param 40, 0.29831671714782715
+printing actual lr for epoch 1, param 50, 1.8226841688156128
+printing actual lr for epoch 1, param 70, 0.37233009934425354
+printing actual lr for epoch 1, param 80, 1.2284828424453735
+epoch 1 train/loss tensor(2.1005) train/accuracy tensor(0.2417) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(2.1004) val/accuracy tensor(0.2199)
+damping for kfac is 0.003
+printing actual lr for epoch 2, param 10, 0.26791900396347046
+printing actual lr for epoch 2, param 20, 2.3801395893096924
+printing actual lr for epoch 2, param 40, 1.7370398044586182
+printing actual lr for epoch 2, param 50, 3.895183801651001
+printing actual lr for epoch 2, param 70, 1.10880708694458
+printing actual lr for epoch 2, param 80, 4.829421043395996
+epoch 2 train/loss tensor(1.5947) train/accuracy tensor(0.4024) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.6006) val/accuracy tensor(0.4239)
+damping for kfac is 0.003
+printing actual lr for epoch 3, param 10, 0.16152074933052063
+printing actual lr for epoch 3, param 20, 0.548410177230835
+printing actual lr for epoch 3, param 40, 0.3292328417301178
+printing actual lr for epoch 3, param 50, 1.3201321363449097
+printing actual lr for epoch 3, param 70, 0.28432682156562805
+printing actual lr for epoch 3, param 80, 2.808061122894287
+epoch 3 train/loss tensor(1.3713) train/accuracy tensor(0.4996) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.8936) val/accuracy tensor(0.3879)
+damping for kfac is 0.003
+printing actual lr for epoch 4, param 10, 0.24352923035621643
+printing actual lr for epoch 4, param 20, 0.942140519618988
+printing actual lr for epoch 4, param 40, 0.34551942348480225
+printing actual lr for epoch 4, param 50, 0.9096036553382874
+printing actual lr for epoch 4, param 70, 0.35730019211769104
+printing actual lr for epoch 4, param 80, 1.42920982837677
+epoch 4 train/loss tensor(1.1771) train/accuracy tensor(0.5797) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+
+val/loss tensor(2.2092) val/accuracy tensor(0.4482)
+damping for kfac is 0.003
+printing actual lr for epoch 5, param 10, 0.27870550751686096
+printing actual lr for epoch 5, param 20, 0.8342563509941101
+printing actual lr for epoch 5, param 40, 0.3294166922569275
+printing actual lr for epoch 5, param 50, 0.7519562840461731
+printing actual lr for epoch 5, param 70, 0.37566229701042175
+printing actual lr for epoch 5, param 80, 1.3970179557800293
+epoch 5 train/loss tensor(1.0568) train/accuracy tensor(0.6241) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.1026) val/accuracy tensor(0.6207)
+damping for kfac is 0.003
+printing actual lr for epoch 6, param 10, 0.4008500576019287
+printing actual lr for epoch 6, param 20, 1.1933395862579346
+printing actual lr for epoch 6, param 40, 0.34091997146606445
+printing actual lr for epoch 6, param 50, 0.6004911065101624
+printing actual lr for epoch 6, param 70, 0.329765647649765
+printing actual lr for epoch 6, param 80, 1.2117419242858887
+epoch 6 train/loss tensor(0.9507) train/accuracy tensor(0.6634) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(2.8380) val/accuracy tensor(0.3681)
+damping for kfac is 0.003
+printing actual lr for epoch 7, param 10, 0.5818349123001099
+printing actual lr for epoch 7, param 20, 0.5253515243530273
+printing actual lr for epoch 7, param 40, 0.42520275712013245
+printing actual lr for epoch 7, param 50, 0.4938564598560333
+printing actual lr for epoch 7, param 70, 0.3608025312423706
+printing actual lr for epoch 7, param 80, 0.6302957534790039
+epoch 7 train/loss tensor(0.8828) train/accuracy tensor(0.6881) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+val/loss tensor(1.1040) val/accuracy tensor(0.6385)
+damping for kfac is 0.003
+printing actual lr for epoch 8, param 10, 0.7277448773384094
+printing actual lr for epoch 8, param 20, 0.5163193345069885
+printing actual lr for epoch 8, param 40, 0.5746546983718872
+printing actual lr for epoch 8, param 50, 0.5341842770576477
+printing actual lr for epoch 8, param 70, 0.49041834473609924
+printing actual lr for epoch 8, param 80, 0.7656344175338745
+epoch 8 train/loss tensor(0.8128) train/accuracy tensor(0.7127) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+
+val/loss tensor(1.4415) val/accuracy tensor(0.5619)
+damping for kfac is 0.003
+printing actual lr for epoch 9, param 10, 0.7845945954322815
+printing actual lr for epoch 9, param 20, 0.5561947822570801
+printing actual lr for epoch 9, param 40, 0.36770766973495483
+printing actual lr for epoch 9, param 50, 0.3611605167388916
+printing actual lr for epoch 9, param 70, 0.3595079481601715
+printing actual lr for epoch 9, param 80, 0.5770952701568604
+epoch 9 train/loss tensor(0.7734) train/accuracy tensor(0.7282) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(2.0757) val/accuracy tensor(0.4193)
+damping for kfac is 0.003
+printing actual lr for epoch 10, param 10, 0.6834513545036316
+printing actual lr for epoch 10, param 20, 0.4470701217651367
+printing actual lr for epoch 10, param 40, 0.3838781416416168
+printing actual lr for epoch 10, param 50, 0.5852896571159363
+printing actual lr for epoch 10, param 70, 0.3493914008140564
+printing actual lr for epoch 10, param 80, 0.9864367842674255
+epoch 10 train/loss tensor(0.7277) train/accuracy tensor(0.7461) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+
+damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+val/loss tensor(1.6498) val/accuracy tensor(0.5760)
+damping for kfac is 0.003
+printing actual lr for epoch 11, param 10, 0.6670469045639038
+printing actual lr for epoch 11, param 20, 0.5756407380104065
+printing actual lr for epoch 11, param 40, 0.46224889159202576
+printing actual lr for epoch 11, param 50, 0.4628066122531891
+printing actual lr for epoch 11, param 70, 0.3972865641117096
+printing actual lr for epoch 11, param 80, 0.7843261957168579
+epoch 11 train/loss tensor(0.6853) train/accuracy tensor(0.7620) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+
+damping for kfac is 0.003
+
+
+
+
+val/loss tensor(0.8739) val/accuracy tensor(0.7010)
+damping for kfac is 0.003
+printing actual lr for epoch 12, param 10, 0.7444254755973816
+printing actual lr for epoch 12, param 20, 0.3991762697696686
+printing actual lr for epoch 12, param 40, 0.42545321583747864
+printing actual lr for epoch 12, param 50, 0.42019906640052795
+printing actual lr for epoch 12, param 70, 0.41493549942970276
+printing actual lr for epoch 12, param 80, 0.805927574634552
+epoch 12 train/loss tensor(0.6574) train/accuracy tensor(0.7718) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.1172) val/accuracy tensor(0.6554)
+damping for kfac is 0.003
+printing actual lr for epoch 13, param 10, 0.6667605638504028
+printing actual lr for epoch 13, param 20, 0.440100759267807
+printing actual lr for epoch 13, param 40, 0.5316648483276367
+printing actual lr for epoch 13, param 50, 0.6545000672340393
+printing actual lr for epoch 13, param 70, 0.43076443672180176
+printing actual lr for epoch 13, param 80, 0.7699675559997559
+epoch 13 train/loss tensor(0.6427) train/accuracy tensor(0.7766) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.4979) val/accuracy tensor(0.5833)
+damping for kfac is 0.003
+printing actual lr for epoch 14, param 10, 0.7560423016548157
+printing actual lr for epoch 14, param 20, 0.3223523497581482
+printing actual lr for epoch 14, param 40, 0.5573903322219849
+printing actual lr for epoch 14, param 50, 0.403518944978714
+printing actual lr for epoch 14, param 70, 0.48929205536842346
+printing actual lr for epoch 14, param 80, 0.6120880246162415
+epoch 14 train/loss tensor(0.6160) train/accuracy tensor(0.7855) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+
+val/loss tensor(1.2548) val/accuracy tensor(0.6466)
+damping for kfac is 0.003
+printing actual lr for epoch 15, param 10, 0.9638867974281311
+printing actual lr for epoch 15, param 20, 0.33554404973983765
+printing actual lr for epoch 15, param 40, 0.601266086101532
+printing actual lr for epoch 15, param 50, 0.33865320682525635
+printing actual lr for epoch 15, param 70, 0.5761788487434387
+printing actual lr for epoch 15, param 80, 0.5579226016998291
+epoch 15 train/loss tensor(0.6001) train/accuracy tensor(0.7925) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.2288) val/accuracy tensor(0.6427)
+damping for kfac is 0.003
+printing actual lr for epoch 16, param 10, 0.6745032072067261
+printing actual lr for epoch 16, param 20, 0.28776201605796814
+printing actual lr for epoch 16, param 40, 0.4591275453567505
+printing actual lr for epoch 16, param 50, 0.4167737662792206
+printing actual lr for epoch 16, param 70, 0.4878513813018799
+printing actual lr for epoch 16, param 80, 0.6118364334106445
+epoch 16 train/loss tensor(0.5964) train/accuracy tensor(0.7933) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+
+val/loss tensor(1.3841) val/accuracy tensor(0.6446)
+damping for kfac is 0.003
+printing actual lr for epoch 17, param 10, 0.5234646201133728
+printing actual lr for epoch 17, param 20, 0.3617458641529083
+printing actual lr for epoch 17, param 40, 0.5308316946029663
+printing actual lr for epoch 17, param 50, 0.27479881048202515
+printing actual lr for epoch 17, param 70, 0.6002896428108215
+printing actual lr for epoch 17, param 80, 0.6323615908622742
+epoch 17 train/loss tensor(0.5813) train/accuracy tensor(0.7955) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+
+val/loss tensor(1.5611) val/accuracy tensor(0.6187)
+damping for kfac is 0.003
+printing actual lr for epoch 18, param 10, 0.6493691205978394
+printing actual lr for epoch 18, param 20, 0.28540346026420593
+printing actual lr for epoch 18, param 40, 0.5165247917175293
+printing actual lr for epoch 18, param 50, 0.3341556787490845
+printing actual lr for epoch 18, param 70, 0.4767744839191437
+printing actual lr for epoch 18, param 80, 0.6118966341018677
+epoch 18 train/loss tensor(0.5581) train/accuracy tensor(0.8068) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.1380) val/accuracy tensor(0.6786)
+damping for kfac is 0.003
+printing actual lr for epoch 19, param 10, 0.451647013425827
+printing actual lr for epoch 19, param 20, 0.18815332651138306
+printing actual lr for epoch 19, param 40, 0.4105157256126404
+printing actual lr for epoch 19, param 50, 0.34425532817840576
+printing actual lr for epoch 19, param 70, 0.49839651584625244
+printing actual lr for epoch 19, param 80, 0.7494709491729736
+epoch 19 train/loss tensor(0.5470) train/accuracy tensor(0.8104) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(0.9067) val/accuracy tensor(0.7145)
+damping for kfac is 0.003
+printing actual lr for epoch 20, param 10, 0.6532543301582336
+printing actual lr for epoch 20, param 20, 0.2831002473831177
+printing actual lr for epoch 20, param 40, 0.43350332975387573
+printing actual lr for epoch 20, param 50, 0.19618560373783112
+printing actual lr for epoch 20, param 70, 0.4997686445713043
+printing actual lr for epoch 20, param 80, 0.4707566499710083
+epoch 20 train/loss tensor(0.5361) train/accuracy tensor(0.8139) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.0781) val/accuracy tensor(0.6763)
+damping for kfac is 0.003
+printing actual lr for epoch 21, param 10, 0.7017138600349426
+printing actual lr for epoch 21, param 20, 0.2415837049484253
+printing actual lr for epoch 21, param 40, 0.5671692490577698
+printing actual lr for epoch 21, param 50, 0.3455672562122345
+printing actual lr for epoch 21, param 70, 0.5381112098693848
+printing actual lr for epoch 21, param 80, 0.29923874139785767
+epoch 21 train/loss tensor(0.5284) train/accuracy tensor(0.8180) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(0.9417) val/accuracy tensor(0.6999)
+damping for kfac is 0.003
+printing actual lr for epoch 22, param 10, 0.5333707928657532
+printing actual lr for epoch 22, param 20, 0.26173874735832214
+printing actual lr for epoch 22, param 40, 0.43787744641304016
+printing actual lr for epoch 22, param 50, 0.30602723360061646
+printing actual lr for epoch 22, param 70, 0.49890226125717163
+printing actual lr for epoch 22, param 80, 0.4317672550678253
+epoch 22 train/loss tensor(0.5179) train/accuracy tensor(0.8209) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(0.6807) val/accuracy tensor(0.7724)
+damping for kfac is 0.003
+printing actual lr for epoch 23, param 10, 0.5227590799331665
+printing actual lr for epoch 23, param 20, 0.31016215682029724
+printing actual lr for epoch 23, param 40, 0.395107239484787
+printing actual lr for epoch 23, param 50, 0.24984696507453918
+printing actual lr for epoch 23, param 70, 0.4692416489124298
+printing actual lr for epoch 23, param 80, 0.39786291122436523
+epoch 23 train/loss tensor(0.5124) train/accuracy tensor(0.8231) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.2553) val/accuracy tensor(0.6276)
+damping for kfac is 0.003
+printing actual lr for epoch 24, param 10, 0.5550478100776672
+printing actual lr for epoch 24, param 20, 0.2175435870885849
+printing actual lr for epoch 24, param 40, 0.3753243684768677
+printing actual lr for epoch 24, param 50, 0.2708941102027893
+printing actual lr for epoch 24, param 70, 0.5356666445732117
+printing actual lr for epoch 24, param 80, 0.4200708866119385
+epoch 24 train/loss tensor(0.4857) train/accuracy tensor(0.8316) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(0.7723) val/accuracy tensor(0.7574)
+damping for kfac is 0.003
+printing actual lr for epoch 25, param 10, 0.450136661529541
+printing actual lr for epoch 25, param 20, 0.30613231658935547
+printing actual lr for epoch 25, param 40, 0.39835256338119507
+printing actual lr for epoch 25, param 50, 0.2697739601135254
+printing actual lr for epoch 25, param 70, 0.4630623459815979
+printing actual lr for epoch 25, param 80, 0.5482786893844604
+epoch 25 train/loss tensor(0.4859) train/accuracy tensor(0.8324) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.4126) val/accuracy tensor(0.6097)
+damping for kfac is 0.003
+printing actual lr for epoch 26, param 10, 0.4108888506889343
+printing actual lr for epoch 26, param 20, 0.20734910666942596
+printing actual lr for epoch 26, param 40, 0.3724541962146759
+printing actual lr for epoch 26, param 50, 0.22709280252456665
+printing actual lr for epoch 26, param 70, 0.38775908946990967
+printing actual lr for epoch 26, param 80, 0.49724864959716797
+epoch 26 train/loss tensor(0.4690) train/accuracy tensor(0.8388) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.0324) val/accuracy tensor(0.7057)
+damping for kfac is 0.003
+printing actual lr for epoch 27, param 10, 0.4506596326828003
+printing actual lr for epoch 27, param 20, 0.18158142268657684
+printing actual lr for epoch 27, param 40, 0.39873746037483215
+printing actual lr for epoch 27, param 50, 0.2361537665128708
+printing actual lr for epoch 27, param 70, 0.3933202028274536
+printing actual lr for epoch 27, param 80, 0.47128382325172424
+epoch 27 train/loss tensor(0.4635) train/accuracy tensor(0.8408) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.0672) val/accuracy tensor(0.6787)
+damping for kfac is 0.003
+printing actual lr for epoch 28, param 10, 0.519014298915863
+printing actual lr for epoch 28, param 20, 0.1200338676571846
+printing actual lr for epoch 28, param 40, 0.3969835638999939
+printing actual lr for epoch 28, param 50, 0.18550989031791687
+printing actual lr for epoch 28, param 70, 0.44499528408050537
+printing actual lr for epoch 28, param 80, 0.3178563416004181
+epoch 28 train/loss tensor(0.4534) train/accuracy tensor(0.8412) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(0.7633) val/accuracy tensor(0.7546)
+damping for kfac is 0.003
+printing actual lr for epoch 29, param 10, 0.3731001019477844
+printing actual lr for epoch 29, param 20, 0.20196101069450378
+printing actual lr for epoch 29, param 40, 0.3493250012397766
+printing actual lr for epoch 29, param 50, 0.1844540685415268
+printing actual lr for epoch 29, param 70, 0.3728005290031433
+printing actual lr for epoch 29, param 80, 0.38775357604026794
+epoch 29 train/loss tensor(0.4445) train/accuracy tensor(0.8463) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+val/loss
+ tensor(1.2655) val/accuracy tensor(0.6504)
+damping for kfac is 0.003
+printing actual lr for epoch 30, param 10, 0.4311331808567047
+printing actual lr for epoch 30, param 20, 0.18743060529232025
+printing actual lr for epoch 30, param 40, 0.31750252842903137
+printing actual lr for epoch 30, param 50, 0.18475903570652008
+printing actual lr for epoch 30, param 70, 0.3654763996601105
+printing actual lr for epoch 30, param 80, 0.44190818071365356
+epoch 30 train/loss tensor(0.4320) train/accuracy tensor(0.8504) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(0.6873) val/accuracy tensor(0.7861)
+damping for kfac is 0.003
+printing actual lr for epoch 31, param 10, 0.5052833557128906
+printing actual lr for epoch 31, param 20, 0.2522715628147125
+printing actual lr for epoch 31, param 40, 0.33637142181396484
+printing actual lr for epoch 31, param 50, 0.1809106320142746
+printing actual lr for epoch 31, param 70, 0.3528445065021515
+printing actual lr for epoch 31, param 80, 0.3464478850364685
+epoch 31 train/loss tensor(0.4258) train/accuracy tensor(0.8516) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.0425) val/accuracy tensor(0.6910)
+damping for kfac is 0.003
+printing actual lr for epoch 32, param 10, 0.3427565097808838
+printing actual lr for epoch 32, param 20, 0.149874746799469
+printing actual lr for epoch 32, param 40, 0.27558210492134094
+printing actual lr for epoch 32, param 50, 0.19644561409950256
+printing actual lr for epoch 32, param 70, 0.3261350095272064
+printing actual lr for epoch 32, param 80, 0.4712619483470917
+epoch 32 train/loss tensor(0.4031) train/accuracy tensor(0.8614) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(0.6663) val/accuracy tensor(0.7940)
+damping for kfac is 0.003
+printing actual lr for epoch 33, param 10, 0.28165557980537415
+printing actual lr for epoch 33, param 20, 0.12023131549358368
+printing actual lr for epoch 33, param 40, 0.2640834152698517
+printing actual lr for epoch 33, param 50, 0.1455485224723816
+printing actual lr for epoch 33, param 70, 0.30085045099258423
+printing actual lr for epoch 33, param 80, 0.413204550743103
+epoch 33 train/loss tensor(0.4081) train/accuracy tensor(0.8601) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+
+val/loss tensor(0.8467) val/accuracy tensor(0.7505)
+damping for kfac is 0.003
+printing actual lr for epoch 34, param 10, 0.2685157358646393
+printing actual lr for epoch 34, param 20, 0.13091842830181122
+printing actual lr for epoch 34, param 40, 0.24852682650089264
+printing actual lr for epoch 34, param 50, 0.17785562574863434
+printing actual lr for epoch 34, param 70, 0.2808305621147156
+printing actual lr for epoch 34, param 80, 0.32497942447662354
+epoch 34 train/loss tensor(0.3900) train/accuracy tensor(0.8648) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.1036) val/accuracy tensor(0.7030)
+damping for kfac is 0.003
+printing actual lr for epoch 35, param 10, 0.2950550615787506
+printing actual lr for epoch 35, param 20, 0.12043697386980057
+printing actual lr for epoch 35, param 40, 0.2893948554992676
+printing actual lr for epoch 35, param 50, 0.15633419156074524
+printing actual lr for epoch 35, param 70, 0.26111334562301636
+printing actual lr for epoch 35, param 80, 0.2775597870349884
+epoch 35 train/loss tensor(0.3875) train/accuracy tensor(0.8661) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.2606) val/accuracy tensor(0.6755)
+damping for kfac is 0.003
+printing actual lr for epoch 36, param 10, 0.30933961272239685
+printing actual lr for epoch 36, param 20, 0.0981694906949997
+printing actual lr for epoch 36, param 40, 0.21729996800422668
+printing actual lr for epoch 36, param 50, 0.1394903063774109
+printing actual lr for epoch 36, param 70, 0.2563786506652832
+printing actual lr for epoch 36, param 80, 0.3697128891944885
+epoch 36 train/loss tensor(0.3700) train/accuracy tensor(0.8727) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(0.6533) val/accuracy tensor(0.7813)
+damping for kfac is 0.003
+printing actual lr for epoch 37, param 10, 0.2657446265220642
+printing actual lr for epoch 37, param 20, 0.1196397915482521
+printing actual lr for epoch 37, param 40, 0.20961320400238037
+printing actual lr for epoch 37, param 50, 0.13153930008411407
+printing actual lr for epoch 37, param 70, 0.22184979915618896
+printing actual lr for epoch 37, param 80, 0.33550751209259033
+epoch 37 train/loss tensor(0.3706) train/accuracy tensor(0.8716) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+
+val/loss tensor(0.7581) val/accuracy tensor(0.7705)
+damping for kfac is 0.003
+printing actual lr for epoch 38, param 10, 0.2736665904521942
+printing actual lr for epoch 38, param 20, 0.10605882853269577
+printing actual lr for epoch 38, param 40, 0.2335374802350998
+printing actual lr for epoch 38, param 50, 0.1384260505437851
+printing actual lr for epoch 38, param 70, 0.2208680808544159
+printing actual lr for epoch 38, param 80, 0.2614416182041168
+epoch 38 train/loss tensor(0.3620) train/accuracy tensor(0.8735) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(1.1079) val/accuracy tensor(0.7161)
+damping for kfac is 0.003
+printing actual lr for epoch 39, param 10, 0.2873289883136749
+printing actual lr for epoch 39, param 20, 0.09921407699584961
+printing actual lr for epoch 39, param 40, 0.22448423504829407
+printing actual lr for epoch 39, param 50, 0.10743933171033859
+printing actual lr for epoch 39, param 70, 0.22331835329532623
+printing actual lr for epoch 39, param 80, 0.23040036857128143
+epoch 39 train/loss tensor(0.3440) train/accuracy tensor(0.8814) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(0.6283) val/accuracy tensor(0.7956)
+damping for kfac is 0.003
+printing actual lr for epoch 40, param 10, 0.25724586844444275
+printing actual lr for epoch 40, param 20, 0.13618989288806915
+printing actual lr for epoch 40, param 40, 0.21223323047161102
+printing actual lr for epoch 40, param 50, 0.1385834813117981
+printing actual lr for epoch 40, param 70, 0.2151111513376236
+printing actual lr for epoch 40, param 80, 0.2609357535839081
+epoch 40 train/loss tensor(0.3427) train/accuracy tensor(0.8824) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(0.5400) val/accuracy tensor(0.8268)
+damping for kfac is 0.003
+printing actual lr for epoch 41, param 10, 0.21671684086322784
+printing actual lr for epoch 41, param 20, 0.1003032922744751
+printing actual lr for epoch 41, param 40, 0.19543017446994781
+printing actual lr for epoch 41, param 50, 0.136109858751297
+printing actual lr for epoch 41, param 70, 0.20093321800231934
+printing actual lr for epoch 41, param 80, 0.2764999270439148
+epoch 41 train/loss tensor(0.3307) train/accuracy tensor(0.8868) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(0.5795) val/accuracy tensor(0.8119)
+damping for kfac is 0.003
+printing actual lr for epoch 42, param 10, 0.2062043696641922
+printing actual lr for epoch 42, param 20, 0.07683378458023071
+printing actual lr for epoch 42, param 40, 0.20089417695999146
+printing actual lr for epoch 42, param 50, 0.12252666056156158
+printing actual lr for epoch 42, param 70, 0.17863431572914124
+printing actual lr for epoch 42, param 80, 0.2075543999671936
+epoch 42 train/loss tensor(0.3236) train/accuracy tensor(0.8882) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+val/loss tensor(0.8644) val/accuracy tensor(0.7600)
+damping for kfac is 0.003
+printing actual lr for epoch 43, param 10, 0.2033095359802246
+printing actual lr for epoch 43, param 20, 0.05008559674024582
+printing actual lr for epoch 43, param 40, 0.1764119267463684
+printing actual lr for epoch 43, param 50, 0.12208514660596848
+printing actual lr for epoch 43, param 70, 0.1847238689661026
+printing actual lr for epoch 43, param 80, 0.17963020503520966
+epoch 43 train/loss tensor(0.3083) train/accuracy tensor(0.8926) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+
+val/loss tensor(0.7840) val/accuracy tensor(0.7578)
+damping for kfac is 0.003
+printing actual lr for epoch 44, param 10, 0.17954738438129425
+printing actual lr for epoch 44, param 20, 0.050244446843862534
+printing actual lr for epoch 44, param 40, 0.16306032240390778
+printing actual lr for epoch 44, param 50, 0.08507677167654037
+printing actual lr for epoch 44, param 70, 0.17137522995471954
+printing actual lr for epoch 44, param 80, 0.176340252161026
+epoch 44 train/loss tensor(0.3038) train/accuracy tensor(0.8944) train/lr 0.8 damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003damping for kfac is 0.003
+
+
+
+
+
+
+val/loss tensor(1.0259) val/accuracy tensor(0.7422)
+damping for kfac is 0.003
+printing actual lr for epoch 45, param 10, 0.14404965937137604
+printing actual lr for epoch 45, param 20, 0.10533572733402252
+printing actual lr for epoch 45, param 40, 0.13709746301174164
+printing actual lr for epoch 45, param 50, 0.11306275427341461
+printing actual lr for epoch 45, param 70, 0.1438215970993042
+printing actual lr for epoch 45, param 80, 0.22020547091960907
+epoch 45 train/loss tensor(0.2959) train/accuracy tensor(0.8985) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+
+
+
+
+
+
+val/loss tensor(0.9958) val/accuracy tensor(0.7153)
+damping for kfac is 0.03
+printing actual lr for epoch 46, param 10, 0.138342946767807
+printing actual lr for epoch 46, param 20, 0.05055953934788704
+printing actual lr for epoch 46, param 40, 0.1335892230272293
+printing actual lr for epoch 46, param 50, 0.09395753592252731
+printing actual lr for epoch 46, param 70, 0.15477228164672852
+printing actual lr for epoch 46, param 80, 0.1661369651556015
+epoch 46 train/loss tensor(0.2900) train/accuracy tensor(0.8989) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+
+
+
+
+
+
+val/loss tensor(0.6371) val/accuracy tensor(0.7982)
+damping for kfac is 0.03
+printing actual lr for epoch 47, param 10, 0.4198451340198517
+printing actual lr for epoch 47, param 20, 0.055098481476306915
+printing actual lr for epoch 47, param 40, 0.36552107334136963
+printing actual lr for epoch 47, param 50, 0.07959870994091034
+printing actual lr for epoch 47, param 70, 0.3865443170070648
+printing actual lr for epoch 47, param 80, 0.17219682037830353
+epoch 47 train/loss tensor(0.2735) train/accuracy tensor(0.9056) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+
+
+
+
+
+
+val/loss tensor(0.5054) val/accuracy tensor(0.8449)
+damping for kfac is 0.03
+printing actual lr for epoch 48, param 10, 0.4380999505519867
+printing actual lr for epoch 48, param 20, 0.08465838432312012
+printing actual lr for epoch 48, param 40, 0.37016817927360535
+printing actual lr for epoch 48, param 50, 0.08340252935886383
+printing actual lr for epoch 48, param 70, 0.3275108337402344
+printing actual lr for epoch 48, param 80, 0.16726504266262054
+epoch 48 train/loss tensor(0.2677) train/accuracy tensor(0.9065) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+
+
+
+
+
+
+val/loss tensor(0.5006) val/accuracy tensor(0.8394)
+damping for kfac is 0.03
+printing actual lr for epoch 49, param 10, 0.29777637124061584
+printing actual lr for epoch 49, param 20, 0.0516820028424263
+printing actual lr for epoch 49, param 40, 0.2924221456050873
+printing actual lr for epoch 49, param 50, 0.08876287192106247
+printing actual lr for epoch 49, param 70, 0.3001839518547058
+printing actual lr for epoch 49, param 80, 0.18927091360092163
+epoch 49 train/loss tensor(0.2603) train/accuracy tensor(0.9100) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+damping for kfac is 0.03
+
+
+
+
+
+val/loss tensor(0.4997) val/accuracy tensor(0.8362)
+damping for kfac is 0.03
+printing actual lr for epoch 50, param 10, 0.2674552798271179
+printing actual lr for epoch 50, param 20, 0.037351008504629135
+printing actual lr for epoch 50, param 40, 0.2575123608112335
+printing actual lr for epoch 50, param 50, 0.06429778784513474
+printing actual lr for epoch 50, param 70, 0.2417091429233551
+printing actual lr for epoch 50, param 80, 0.18287423253059387
+epoch 50 train/loss tensor(0.2470) train/accuracy tensor(0.9148) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+damping for kfac is 0.03
+
+
+
+
+
+val/loss tensor(0.4579) val/accuracy tensor(0.8490)
+damping for kfac is 0.03
+printing actual lr for epoch 51, param 10, 0.24889634549617767
+printing actual lr for epoch 51, param 20, 0.0933314859867096
+printing actual lr for epoch 51, param 40, 0.22147630155086517
+printing actual lr for epoch 51, param 50, 0.08799023181200027
+printing actual lr for epoch 51, param 70, 0.2262563407421112
+printing actual lr for epoch 51, param 80, 0.19495345652103424
+epoch 51 train/loss tensor(0.2465) train/accuracy tensor(0.9144) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+damping for kfac is 0.03
+
+
+
+
+
+val/loss tensor(0.4792) val/accuracy tensor(0.8506)
+damping for kfac is 0.03
+printing actual lr for epoch 52, param 10, 0.22296065092086792
+printing actual lr for epoch 52, param 20, 0.06772388517856598
+printing actual lr for epoch 52, param 40, 0.2064473032951355
+printing actual lr for epoch 52, param 50, 0.08646678179502487
+printing actual lr for epoch 52, param 70, 0.21316049993038177
+printing actual lr for epoch 52, param 80, 0.17891772091388702
+epoch 52 train/loss tensor(0.2286) train/accuracy tensor(0.9199) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+damping for kfac is 0.03
+
+
+
+
+
+val/loss tensor(0.4709) val/accuracy tensor(0.8553)
+damping for kfac is 0.03
+printing actual lr for epoch 53, param 10, 0.21948540210723877
+printing actual lr for epoch 53, param 20, 0.03785834088921547
+printing actual lr for epoch 53, param 40, 0.1968439519405365
+printing actual lr for epoch 53, param 50, 0.04690748453140259
+printing actual lr for epoch 53, param 70, 0.18328414857387543
+printing actual lr for epoch 53, param 80, 0.14106601476669312
+epoch 53 train/loss tensor(0.2282) train/accuracy tensor(0.9214) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+damping for kfac is 0.03damping for kfac is 0.03
+
+
+
+
+
+val/loss tensor(0.4495) val/accuracy tensor(0.8520)
+damping for kfac is 0.03
+printing actual lr for epoch 54, param 10, 0.17590107023715973
+printing actual lr for epoch 54, param 20, 0.0393751859664917
+printing actual lr for epoch 54, param 40, 0.15872669219970703
+printing actual lr for epoch 54, param 50, 0.07271736860275269
+printing actual lr for epoch 54, param 70, 0.15870365500450134
+printing actual lr for epoch 54, param 80, 0.18558917939662933
+epoch 54 train/loss tensor(0.2175) train/accuracy tensor(0.9235) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+
+
+
+
+
+
+val/loss tensor(0.5641) val/accuracy tensor(0.8192)
+damping for kfac is 0.03
+printing actual lr for epoch 55, param 10, 0.157606303691864
+printing actual lr for epoch 55, param 20, 0.04452917352318764
+printing actual lr for epoch 55, param 40, 0.14475193619728088
+printing actual lr for epoch 55, param 50, 0.0475333072245121
+printing actual lr for epoch 55, param 70, 0.15741614997386932
+printing actual lr for epoch 55, param 80, 0.17867738008499146
+epoch 55 train/loss tensor(0.2068) train/accuracy tensor(0.9261) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+damping for kfac is 0.03
+
+
+
+
+
+val/loss tensor(1.1491) val/accuracy tensor(0.7162)
+damping for kfac is 0.03
+printing actual lr for epoch 56, param 10, 0.1575910598039627
+printing actual lr for epoch 56, param 20, 0.03169626742601395
+printing actual lr for epoch 56, param 40, 0.13667301833629608
+printing actual lr for epoch 56, param 50, 0.04592422395944595
+printing actual lr for epoch 56, param 70, 0.12467057257890701
+printing actual lr for epoch 56, param 80, 0.1507374346256256
+epoch 56 train/loss tensor(0.2020) train/accuracy tensor(0.9289) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+damping for kfac is 0.03
+
+
+
+
+
+val/loss tensor(0.3995) val/accuracy tensor(0.8732)
+damping for kfac is 0.03
+printing actual lr for epoch 57, param 10, 0.12123569846153259
+printing actual lr for epoch 57, param 20, 0.037229154258966446
+printing actual lr for epoch 57, param 40, 0.11642538756132126
+printing actual lr for epoch 57, param 50, 0.053534556180238724
+printing actual lr for epoch 57, param 70, 0.11291706562042236
+printing actual lr for epoch 57, param 80, 0.14525792002677917
+epoch 57 train/loss tensor(0.1960) train/accuracy tensor(0.9312) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+damping for kfac is 0.03damping for kfac is 0.03
+
+
+
+
+
+val/loss tensor(0.4607) val/accuracy tensor(0.8579)
+damping for kfac is 0.03
+printing actual lr for epoch 58, param 10, 0.11102216690778732
+printing actual lr for epoch 58, param 20, 0.03858243301510811
+printing actual lr for epoch 58, param 40, 0.0996505618095398
+printing actual lr for epoch 58, param 50, 0.043438199907541275
+printing actual lr for epoch 58, param 70, 0.10231228917837143
+printing actual lr for epoch 58, param 80, 0.17778202891349792
+epoch 58 train/loss tensor(0.1876) train/accuracy tensor(0.9341) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+damping for kfac is 0.03
+
+
+
+
+
+val/loss tensor(0.4003) val/accuracy tensor(0.8738)
+damping for kfac is 0.03
+printing actual lr for epoch 59, param 10, 0.09742317348718643
+printing actual lr for epoch 59, param 20, 0.024685747921466827
+printing actual lr for epoch 59, param 40, 0.09720511734485626
+printing actual lr for epoch 59, param 50, 0.04793711379170418
+printing actual lr for epoch 59, param 70, 0.09650925546884537
+printing actual lr for epoch 59, param 80, 0.14014309644699097
+epoch 59 train/loss tensor(0.1830) train/accuracy tensor(0.9354) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+damping for kfac is 0.03
+
+
+
+
+
+val/loss tensor(0.5155) val/accuracy tensor(0.8441)
+damping for kfac is 0.03
+printing actual lr for epoch 60, param 10, 0.09258382767438889
+printing actual lr for epoch 60, param 20, 0.024276847019791603
+printing actual lr for epoch 60, param 40, 0.08111947029829025
+printing actual lr for epoch 60, param 50, 0.054816655814647675
+printing actual lr for epoch 60, param 70, 0.08450686931610107
+printing actual lr for epoch 60, param 80, 0.1405968815088272
+epoch 60 train/loss tensor(0.1694) train/accuracy tensor(0.9398) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+damping for kfac is 0.03
+
+
+
+
+
+val/loss tensor(0.4822) val/accuracy tensor(0.8550)
+damping for kfac is 0.03
+printing actual lr for epoch 61, param 10, 0.09208773821592331
+printing actual lr for epoch 61, param 20, 0.0365043468773365
+printing actual lr for epoch 61, param 40, 0.08385437726974487
+printing actual lr for epoch 61, param 50, 0.039203617721796036
+printing actual lr for epoch 61, param 70, 0.07789197564125061
+printing actual lr for epoch 61, param 80, 0.10818257927894592
+epoch 61 train/loss tensor(0.1648) train/accuracy tensor(0.9418) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+damping for kfac is 0.03
+
+
+
+
+
+val/loss tensor(0.4829) val/accuracy tensor(0.8518)
+damping for kfac is 0.03
+printing actual lr for epoch 62, param 10, 0.07961930334568024
+printing actual lr for epoch 62, param 20, 0.034466590732336044
+printing actual lr for epoch 62, param 40, 0.06803173571825027
+printing actual lr for epoch 62, param 50, 0.04232423007488251
+printing actual lr for epoch 62, param 70, 0.07434036582708359
+printing actual lr for epoch 62, param 80, 0.15785005688667297
+epoch 62 train/loss tensor(0.1562) train/accuracy tensor(0.9451) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+damping for kfac is 0.03
+
+
+
+
+
+val/loss tensor(0.4795) val/accuracy tensor(0.8602)
+damping for kfac is 0.03
+printing actual lr for epoch 63, param 10, 0.07011719048023224
+printing actual lr for epoch 63, param 20, 0.021033262833952904
+printing actual lr for epoch 63, param 40, 0.06255500018596649
+printing actual lr for epoch 63, param 50, 0.03558780997991562
+printing actual lr for epoch 63, param 70, 0.06371654570102692
+printing actual lr for epoch 63, param 80, 0.12604402005672455
+epoch 63 train/loss tensor(0.1481) train/accuracy tensor(0.9478) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+damping for kfac is 0.03
+
+
+
+
+
+val/loss tensor(0.3881) val/accuracy tensor(0.8837)
+damping for kfac is 0.03
+printing actual lr for epoch 64, param 10, 0.0531347319483757
+printing actual lr for epoch 64, param 20, 0.024085430428385735
+printing actual lr for epoch 64, param 40, 0.057713888585567474
+printing actual lr for epoch 64, param 50, 0.04064412787556648
+printing actual lr for epoch 64, param 70, 0.06126203387975693
+printing actual lr for epoch 64, param 80, 0.11704077571630478
+epoch 64 train/loss tensor(0.1415) train/accuracy tensor(0.9492) train/lr 0.8 damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03damping for kfac is 0.03
+
+
+
+
+
+
+val/loss tensor(0.3460) val/accuracy tensor(0.8923)
+damping for kfac is 0.03
+printing actual lr for epoch 65, param 10, 0.05631943419575691
+printing actual lr for epoch 65, param 20, 0.018188418820500374
+printing actual lr for epoch 65, param 40, 0.04874451830983162
+printing actual lr for epoch 65, param 50, 0.035845719277858734
+printing actual lr for epoch 65, param 70, 0.049265190958976746
+printing actual lr for epoch 65, param 80, 0.11061976104974747
+epoch 65 train/loss tensor(0.1368) train/accuracy tensor(0.9521) train/lr 0.8 damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3
+
+
+
+
+
+
+val/loss tensor(0.4306) val/accuracy tensor(0.8805)
+damping for kfac is 0.3
+printing actual lr for epoch 66, param 10, 0.046092525124549866
+printing actual lr for epoch 66, param 20, 0.020890632644295692
+printing actual lr for epoch 66, param 40, 0.045299310237169266
+printing actual lr for epoch 66, param 50, 0.04313529282808304
+printing actual lr for epoch 66, param 70, 0.043415918946266174
+printing actual lr for epoch 66, param 80, 0.15081076323986053
+epoch 66 train/loss tensor(0.1264) train/accuracy tensor(0.9555) train/lr 0.8 damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3
+damping for kfac is 0.3
+
+
+
+
+
+val/loss tensor(0.3662) val/accuracy tensor(0.8858)
+damping for kfac is 0.3
+printing actual lr for epoch 67, param 10, 0.12852007150650024
+printing actual lr for epoch 67, param 20, 0.020968401804566383
+printing actual lr for epoch 67, param 40, 0.11772915720939636
+printing actual lr for epoch 67, param 50, 0.03012552671134472
+printing actual lr for epoch 67, param 70, 0.11899527162313461
+printing actual lr for epoch 67, param 80, 0.10063076764345169
+epoch 67 train/loss tensor(0.1219) train/accuracy tensor(0.9571) train/lr 0.8 damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3
+
+
+
+
+
+
+val/loss tensor(0.3677) val/accuracy tensor(0.8882)
+damping for kfac is 0.3
+printing actual lr for epoch 68, param 10, 0.10616181045770645
+printing actual lr for epoch 68, param 20, 0.014314798638224602
+printing actual lr for epoch 68, param 40, 0.10144000500440598
+printing actual lr for epoch 68, param 50, 0.026787707582116127
+printing actual lr for epoch 68, param 70, 0.10381299257278442
+printing actual lr for epoch 68, param 80, 0.08847016096115112
+epoch 68 train/loss tensor(0.1161) train/accuracy tensor(0.9603) train/lr 0.8 damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3
+
+
+
+
+
+
+val/loss tensor(0.3754) val/accuracy tensor(0.8898)
+damping for kfac is 0.3
+printing actual lr for epoch 69, param 10, 0.09535756707191467
+printing actual lr for epoch 69, param 20, 0.013057614676654339
+printing actual lr for epoch 69, param 40, 0.08447661250829697
+printing actual lr for epoch 69, param 50, 0.027702974155545235
+printing actual lr for epoch 69, param 70, 0.09156323969364166
+printing actual lr for epoch 69, param 80, 0.0834197998046875
+epoch 69 train/loss tensor(0.1091) train/accuracy tensor(0.9621) train/lr 0.8 damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3
+
+
+
+
+
+
+val/loss tensor(0.3799) val/accuracy tensor(0.8909)
+damping for kfac is 0.3
+printing actual lr for epoch 70, param 10, 0.09153465181589127
+printing actual lr for epoch 70, param 20, 0.012591122649610043
+printing actual lr for epoch 70, param 40, 0.07398982346057892
+printing actual lr for epoch 70, param 50, 0.017626894637942314
+printing actual lr for epoch 70, param 70, 0.07737550139427185
+printing actual lr for epoch 70, param 80, 0.1011471301317215
+epoch 70 train/loss tensor(0.1017) train/accuracy tensor(0.9646) train/lr 0.8 damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3
+
+
+
+
+
+
+val/loss tensor(0.3468) val/accuracy tensor(0.8979)
+damping for kfac is 0.3
+printing actual lr for epoch 71, param 10, 0.06934721022844315
+printing actual lr for epoch 71, param 20, 0.018841739743947983
+printing actual lr for epoch 71, param 40, 0.06551137566566467
+printing actual lr for epoch 71, param 50, 0.01856841705739498
+printing actual lr for epoch 71, param 70, 0.06432908028364182
+printing actual lr for epoch 71, param 80, 0.0750778391957283
+epoch 71 train/loss tensor(0.1005) train/accuracy tensor(0.9641) train/lr 0.8 damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3
+
+
+
+
+
+
+val/loss tensor(0.3537) val/accuracy tensor(0.9009)
+damping for kfac is 0.3
+printing actual lr for epoch 72, param 10, 0.054689161479473114
+printing actual lr for epoch 72, param 20, 0.012574763037264347
+printing actual lr for epoch 72, param 40, 0.05465109646320343
+printing actual lr for epoch 72, param 50, 0.028002211824059486
+printing actual lr for epoch 72, param 70, 0.05685553699731827
+printing actual lr for epoch 72, param 80, 0.08562056720256805
+epoch 72 train/loss tensor(0.0920) train/accuracy tensor(0.9680) train/lr 0.8 damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3
+damping for kfac is 0.3
+
+
+
+
+
+val/loss tensor(0.3955) val/accuracy tensor(0.8935)
+damping for kfac is 0.3
+printing actual lr for epoch 73, param 10, 0.0506562702357769
+printing actual lr for epoch 73, param 20, 0.017659349367022514
+printing actual lr for epoch 73, param 40, 0.050223249942064285
+printing actual lr for epoch 73, param 50, 0.029561474919319153
+printing actual lr for epoch 73, param 70, 0.04760019853711128
+printing actual lr for epoch 73, param 80, 0.09131806343793869
+epoch 73 train/loss tensor(0.0828) train/accuracy tensor(0.9719) train/lr 0.8 damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3
+damping for kfac is 0.3
+
+
+
+
+
+val/loss tensor(0.3678) val/accuracy tensor(0.8994)
+damping for kfac is 0.3
+printing actual lr for epoch 74, param 10, 0.043055497109889984
+printing actual lr for epoch 74, param 20, 0.012737319804728031
+printing actual lr for epoch 74, param 40, 0.03672430291771889
+printing actual lr for epoch 74, param 50, 0.013993152417242527
+printing actual lr for epoch 74, param 70, 0.04089368134737015
+printing actual lr for epoch 74, param 80, 0.07018014788627625
+epoch 74 train/loss tensor(0.0857) train/accuracy tensor(0.9704) train/lr 0.8 damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3
+damping for kfac is 0.3damping for kfac is 0.3
+
+
+
+
+
+val/loss tensor(0.3232) val/accuracy tensor(0.9063)
+damping for kfac is 0.3
+printing actual lr for epoch 75, param 10, 0.03395439684391022
+printing actual lr for epoch 75, param 20, 0.011601816862821579
+printing actual lr for epoch 75, param 40, 0.03404209390282631
+printing actual lr for epoch 75, param 50, 0.022312335669994354
+printing actual lr for epoch 75, param 70, 0.033893927931785583
+printing actual lr for epoch 75, param 80, 0.06566032022237778
+epoch 75 train/loss tensor(0.0748) train/accuracy tensor(0.9748) train/lr 0.8 damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3
+damping for kfac is 0.3damping for kfac is 0.3
+
+
+
+
+
+val/loss tensor(0.3492) val/accuracy tensor(0.9049)
+damping for kfac is 0.3
+printing actual lr for epoch 76, param 10, 0.031698234379291534
+printing actual lr for epoch 76, param 20, 0.008840743452310562
+printing actual lr for epoch 76, param 40, 0.03078247606754303
+printing actual lr for epoch 76, param 50, 0.015426074154675007
+printing actual lr for epoch 76, param 70, 0.030242763459682465
+printing actual lr for epoch 76, param 80, 0.04576002061367035
+epoch 76 train/loss tensor(0.0708) train/accuracy tensor(0.9748) train/lr 0.8 damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3
+
+
+
+
+
+
+val/loss tensor(0.3365) val/accuracy tensor(0.9051)
+damping for kfac is 0.3
+printing actual lr for epoch 77, param 10, 0.02861565165221691
+printing actual lr for epoch 77, param 20, 0.010589049197733402
+printing actual lr for epoch 77, param 40, 0.026392649859189987
+printing actual lr for epoch 77, param 50, 0.014772593043744564
+printing actual lr for epoch 77, param 70, 0.02485787309706211
+printing actual lr for epoch 77, param 80, 0.06701749563217163
+epoch 77 train/loss tensor(0.0677) train/accuracy tensor(0.9765) train/lr 0.8 damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3
+damping for kfac is 0.3damping for kfac is 0.3
+
+
+
+
+
+val/loss tensor(0.3598) val/accuracy tensor(0.9047)
+damping for kfac is 0.3
+printing actual lr for epoch 78, param 10, 0.021447574719786644
+printing actual lr for epoch 78, param 20, 0.005936795845627785
+printing actual lr for epoch 78, param 40, 0.021310914307832718
+printing actual lr for epoch 78, param 50, 0.011402605101466179
+printing actual lr for epoch 78, param 70, 0.020804326981306076
+printing actual lr for epoch 78, param 80, 0.050900500267744064
+epoch 78 train/loss tensor(0.0624) train/accuracy tensor(0.9783) train/lr 0.8 damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3
+damping for kfac is 0.3
+
+
+
+
+
+val/loss tensor(0.3700) val/accuracy tensor(0.9013)
+damping for kfac is 0.3
+printing actual lr for epoch 79, param 10, 0.021832149475812912
+printing actual lr for epoch 79, param 20, 0.008873861283063889
+printing actual lr for epoch 79, param 40, 0.021313132718205452
+printing actual lr for epoch 79, param 50, 0.014495642855763435
+printing actual lr for epoch 79, param 70, 0.019593439996242523
+printing actual lr for epoch 79, param 80, 0.05835923179984093
+epoch 79 train/loss tensor(0.0575) train/accuracy tensor(0.9804) train/lr 0.8 damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3damping for kfac is 0.3
+
+
+
+
+
+
+val/loss tensor(0.3594) val/accuracy tensor(0.9041)
+damping for kfac is 0.3
+printing actual lr for epoch 80, param 10, 0.0189808439463377
+printing actual lr for epoch 80, param 20, 0.008780651725828648
+printing actual lr for epoch 80, param 40, 0.017358722165226936
+printing actual lr for epoch 80, param 50, 0.009830094873905182
+printing actual lr for epoch 80, param 70, 0.017159685492515564
+printing actual lr for epoch 80, param 80, 0.05004717782139778
+epoch 80 train/loss tensor(0.0552) train/accuracy tensor(0.9812) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3466) val/accuracy tensor(0.9055)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 81, param 10, 0.046443961560726166
+printing actual lr for epoch 81, param 20, 0.005527127999812365
+printing actual lr for epoch 81, param 40, 0.039167243987321854
+printing actual lr for epoch 81, param 50, 0.008312379941344261
+printing actual lr for epoch 81, param 70, 0.039783041924238205
+printing actual lr for epoch 81, param 80, 0.03673500940203667
+epoch 81 train/loss tensor(0.0488) train/accuracy tensor(0.9838) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3332) val/accuracy tensor(0.9107)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 82, param 10, 0.042263176292181015
+printing actual lr for epoch 82, param 20, 0.005678802262991667
+printing actual lr for epoch 82, param 40, 0.03539092466235161
+printing actual lr for epoch 82, param 50, 0.00787411443889141
+printing actual lr for epoch 82, param 70, 0.036527182906866074
+printing actual lr for epoch 82, param 80, 0.029030580073595047
+epoch 82 train/loss tensor(0.0490) train/accuracy tensor(0.9840) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3401) val/accuracy tensor(0.9108)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 83, param 10, 0.043663498014211655
+printing actual lr for epoch 83, param 20, 0.005643045995384455
+printing actual lr for epoch 83, param 40, 0.04233192279934883
+printing actual lr for epoch 83, param 50, 0.010150919668376446
+printing actual lr for epoch 83, param 70, 0.03968347981572151
+printing actual lr for epoch 83, param 80, 0.0436311736702919
+epoch 83 train/loss tensor(0.0453) train/accuracy tensor(0.9861) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+
+damping for kfac is 0.8999999999999999
+
+
+
+
+val/loss tensor(0.3268) val/accuracy tensor(0.9116)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 84, param 10, 0.02682044357061386
+printing actual lr for epoch 84, param 20, 0.0035249022766947746
+printing actual lr for epoch 84, param 40, 0.026476522907614708
+printing actual lr for epoch 84, param 50, 0.006812842097133398
+printing actual lr for epoch 84, param 70, 0.02920372411608696
+printing actual lr for epoch 84, param 80, 0.035002924501895905
+epoch 84 train/loss tensor(0.0433) train/accuracy tensor(0.9861) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+
+
+
+
+
+
+val/loss tensor(0.3190) val/accuracy tensor(0.9138)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 85, param 10, 0.022604916244745255
+printing actual lr for epoch 85, param 20, 0.002990065375342965
+printing actual lr for epoch 85, param 40, 0.021748332306742668
+printing actual lr for epoch 85, param 50, 0.0057752965949475765
+printing actual lr for epoch 85, param 70, 0.02233595959842205
+printing actual lr for epoch 85, param 80, 0.028801988810300827
+epoch 85 train/loss tensor(0.0393) train/accuracy tensor(0.9882) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3169) val/accuracy tensor(0.9131)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 86, param 10, 0.02160743996500969
+printing actual lr for epoch 86, param 20, 0.0028380206786096096
+printing actual lr for epoch 86, param 40, 0.020955486223101616
+printing actual lr for epoch 86, param 50, 0.004942706786096096
+printing actual lr for epoch 86, param 70, 0.020452572032809258
+printing actual lr for epoch 86, param 80, 0.024349398910999298
+epoch 86 train/loss tensor(0.0385) train/accuracy tensor(0.9879) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3098) val/accuracy tensor(0.9146)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 87, param 10, 0.026896171271800995
+printing actual lr for epoch 87, param 20, 0.0027041032444685698
+printing actual lr for epoch 87, param 40, 0.022808706387877464
+printing actual lr for epoch 87, param 50, 0.00541215855628252
+printing actual lr for epoch 87, param 70, 0.02172372117638588
+printing actual lr for epoch 87, param 80, 0.025370247662067413
+epoch 87 train/loss tensor(0.0354) train/accuracy tensor(0.9893) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3124) val/accuracy tensor(0.9161)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 88, param 10, 0.02139272727072239
+printing actual lr for epoch 88, param 20, 0.0029802867211401463
+printing actual lr for epoch 88, param 40, 0.018735885620117188
+printing actual lr for epoch 88, param 50, 0.004253399092704058
+printing actual lr for epoch 88, param 70, 0.019286703318357468
+printing actual lr for epoch 88, param 80, 0.024489358067512512
+epoch 88 train/loss tensor(0.0323) train/accuracy tensor(0.9908) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3176) val/accuracy tensor(0.9128)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 89, param 10, 0.01777021400630474
+printing actual lr for epoch 89, param 20, 0.0026024500839412212
+printing actual lr for epoch 89, param 40, 0.016037117689847946
+printing actual lr for epoch 89, param 50, 0.0037399600259959698
+printing actual lr for epoch 89, param 70, 0.014760942198336124
+printing actual lr for epoch 89, param 80, 0.019637824967503548
+epoch 89 train/loss tensor(0.0322) train/accuracy tensor(0.9907) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3241) val/accuracy tensor(0.9150)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 90, param 10, 0.015333114191889763
+printing actual lr for epoch 90, param 20, 0.0022444669157266617
+printing actual lr for epoch 90, param 40, 0.0142670888453722
+printing actual lr for epoch 90, param 50, 0.0040596043691039085
+printing actual lr for epoch 90, param 70, 0.014243065379559994
+printing actual lr for epoch 90, param 80, 0.014821525663137436
+epoch 90 train/loss tensor(0.0313) train/accuracy tensor(0.9907) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3135) val/accuracy tensor(0.9174)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 91, param 10, 0.00956735759973526
+printing actual lr for epoch 91, param 20, 0.001758038648404181
+printing actual lr for epoch 91, param 40, 0.008044921793043613
+printing actual lr for epoch 91, param 50, 0.002280929358676076
+printing actual lr for epoch 91, param 70, 0.009579445235431194
+printing actual lr for epoch 91, param 80, 0.011037752032279968
+epoch 91 train/loss tensor(0.0302) train/accuracy tensor(0.9917) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3179) val/accuracy tensor(0.9166)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 92, param 10, 0.007567888125777245
+printing actual lr for epoch 92, param 20, 0.0009293178445659578
+printing actual lr for epoch 92, param 40, 0.007084508426487446
+printing actual lr for epoch 92, param 50, 0.001898398739285767
+printing actual lr for epoch 92, param 70, 0.006991788744926453
+printing actual lr for epoch 92, param 80, 0.009133481420576572
+epoch 92 train/loss tensor(0.0289) train/accuracy tensor(0.9923) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3133) val/accuracy tensor(0.9168)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 93, param 10, 0.010102707892656326
+printing actual lr for epoch 93, param 20, 0.001121977111324668
+printing actual lr for epoch 93, param 40, 0.009011036716401577
+printing actual lr for epoch 93, param 50, 0.001998438499867916
+printing actual lr for epoch 93, param 70, 0.00898439809679985
+printing actual lr for epoch 93, param 80, 0.010446691885590553
+epoch 93 train/loss tensor(0.0285) train/accuracy tensor(0.9921) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3114) val/accuracy tensor(0.9164)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 94, param 10, 0.005330644082278013
+printing actual lr for epoch 94, param 20, 0.0005936484667472541
+printing actual lr for epoch 94, param 40, 0.004660558886826038
+printing actual lr for epoch 94, param 50, 0.001080048969015479
+printing actual lr for epoch 94, param 70, 0.00463715149089694
+printing actual lr for epoch 94, param 80, 0.005500074476003647
+epoch 94 train/loss tensor(0.0267) train/accuracy tensor(0.9931) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999
+
+
+
+
+val/loss tensor(0.3123) val/accuracy tensor(0.9157)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 95, param 10, 0.003052624873816967
+printing actual lr for epoch 95, param 20, 0.00045308758853934705
+printing actual lr for epoch 95, param 40, 0.0029995536897331476
+printing actual lr for epoch 95, param 50, 0.000540580484084785
+printing actual lr for epoch 95, param 70, 0.002822475740686059
+printing actual lr for epoch 95, param 80, 0.003398539498448372
+epoch 95 train/loss tensor(0.0268) train/accuracy tensor(0.9928) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3136) val/accuracy tensor(0.9161)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 96, param 10, 0.002382434904575348
+printing actual lr for epoch 96, param 20, 0.00041064739343710244
+printing actual lr for epoch 96, param 40, 0.0020465634297579527
+printing actual lr for epoch 96, param 50, 0.00048248175880871713
+printing actual lr for epoch 96, param 70, 0.0020639332942664623
+printing actual lr for epoch 96, param 80, 0.002316126599907875
+epoch 96 train/loss tensor(0.0268) train/accuracy tensor(0.9927) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3108) val/accuracy tensor(0.9179)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 97, param 10, 0.0016185349086299539
+printing actual lr for epoch 97, param 20, 0.0002319183258805424
+printing actual lr for epoch 97, param 40, 0.0014838894130662084
+printing actual lr for epoch 97, param 50, 0.00042618755833245814
+printing actual lr for epoch 97, param 70, 0.0014787811087444425
+printing actual lr for epoch 97, param 80, 0.0018616574816405773
+epoch 97 train/loss tensor(0.0255) train/accuracy tensor(0.9934) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3105) val/accuracy tensor(0.9170)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 98, param 10, 0.0006087174406275153
+printing actual lr for epoch 98, param 20, 0.00017732573905959725
+printing actual lr for epoch 98, param 40, 0.0005969063495285809
+printing actual lr for epoch 98, param 50, 0.0001305976475123316
+printing actual lr for epoch 98, param 70, 0.000578000268433243
+printing actual lr for epoch 98, param 80, 0.0006526688230223954
+epoch 98 train/loss tensor(0.0254) train/accuracy tensor(0.9937) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3132) val/accuracy tensor(0.9166)
+damping for kfac is 0.8999999999999999
+printing actual lr for epoch 99, param 10, 0.00016463907377328724
+printing actual lr for epoch 99, param 20, 2.4598994059488177e-05
+printing actual lr for epoch 99, param 40, 0.00014898271183483303
+printing actual lr for epoch 99, param 50, 3.461020241957158e-05
+printing actual lr for epoch 99, param 70, 0.00015248919953592122
+printing actual lr for epoch 99, param 80, 0.0001666505413595587
+epoch 99 train/loss tensor(0.0260) train/accuracy tensor(0.9932) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3143) val/accuracy tensor(0.9158)
+damping for kfac is 0.8999999999999999
+epoch 100 train/loss tensor(0.0244) train/accuracy tensor(0.9939) train/lr 0.8 damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999damping for kfac is 0.8999999999999999
+damping for kfac is 0.8999999999999999
+
+
+
+
+
+val/loss tensor(0.3120) val/accuracy tensor(0.9164)
+damping for kfac is 0.8999999999999999
+
+Training time: 0:06:08.470399

@@ -52,7 +52,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         '--checkpoint-format',
-        default='checkpoint_{epoch}.pth.tar',
+        default='{optim}_checkpoint_{epoch}.pth.tar',
         help='checkpoint file format',
     )
     parser.add_argument(
@@ -158,16 +158,61 @@ def parse_args() -> argparse.Namespace:
         help='KFAC damping const/decay',
     )
     parser.add_argument(
-        '--lars',
-        default=False, 
-        action='store_true',
-        help='use lars',
+        '--scale2',
+        type=float,
+        default=3.8,
+        help='scale for sigmoid function in kfac decay damping',
     )
+    # parser.add_argument(
+    #     '--lars',
+    #     default=False, 
+    #     action='store_true',
+    #     help='use lars',
+    # )
     parser.add_argument(
         '--trust-coef',
         type=float,
         default=0.001,
         help='trust coefficient for lars',
+    )
+
+    #TODO: add arguments
+    parser.add_argument(
+        '--optim',
+        default='sgd', 
+        type=str, 
+        help='optimizer',
+        choices=['sgd', 'adagrad', 'adam', 'amsgrad', 'adabound', 'amsbound','lars'],
+    )
+    parser.add_argument(
+        '--beta1',
+        default=0.9, 
+        type=float, 
+        help='Adam coefficients beta_1',
+    )
+    parser.add_argument(
+        '--beta2',
+        default=0.999, 
+        type=float, 
+        help='Adam coefficients beta_2',
+    )
+    parser.add_argument(
+        '--final_lr',
+        default=-1.0, 
+        type=float, 
+        help='final learning rate of AdaBound',
+    )
+    parser.add_argument(
+        '--gamma',
+        default=1e-3, 
+        type=float, 
+        help='convergence speed term of AdaBound',
+    )
+    parser.add_argument(
+        '--eps',
+        default=-1.0, 
+        type=float, 
+        help='eps for adam',
     )
 
     # KFAC Parameters
@@ -293,6 +338,9 @@ if __name__ == '__main__':
     )
     torch.distributed.barrier()
 
+    #todo: add argument here
+    args.lars = (args.optim == 'lars')
+    
     if args.cuda:
         torch.cuda.set_device(args.local_rank)
         torch.cuda.manual_seed(args.seed)
@@ -305,6 +353,9 @@ if __name__ == '__main__':
         # 0.6 if dist.get_world_size() * args.batch_size == 8 * 1024 else
         args.base_lr * dist.get_world_size() * args.batches_per_allreduce#)
     )
+    #todo, set final lr as base lr if not manually given 
+    args.final_lr = args.base_lr if args.final_lr <= 0 else args.final_lr
+    args.eps = args.base_lr if args.eps <= 0 else args.eps
     args.verbose = dist.get_rank() == 0
 
     if args.verbose:
@@ -344,7 +395,7 @@ if __name__ == '__main__':
     # If set > 0, will resume training from a given checkpoint.
     args.resume_from_epoch = 0
     for try_epoch in range(args.epochs, 0, -1):
-        if os.path.exists(args.checkpoint_format.format(epoch=try_epoch)):
+        if os.path.exists(args.checkpoint_format.format(optim=args.optim,epoch=try_epoch)):
             args.resume_from_epoch = try_epoch
             break
 
@@ -373,7 +424,7 @@ if __name__ == '__main__':
 
     # Restore from a previous checkpoint, if initial_epoch is specified.
     if args.resume_from_epoch > 0:
-        filepath = args.checkpoint_format.format(epoch=args.resume_from_epoch)
+        filepath = args.checkpoint_format.format(optim=args.optim, epoch=args.resume_from_epoch)
         map_location = {'cuda:0': f'cuda:{args.local_rank}'}
         checkpoint = torch.load(filepath, map_location=map_location)
         model.module.load_state_dict(checkpoint['model'])
@@ -404,6 +455,7 @@ if __name__ == '__main__':
         if lr_scheduler is not None:
             lr_scheduler.step()
         if kfac_scheduler is not None:
+            #todo: remove test code
             kfac_scheduler.step(step=epoch)
         if (
             epoch > 0
@@ -417,7 +469,7 @@ if __name__ == '__main__':
                 optimizer,
                 preconditioner,
                 lr_scheduler,
-                args.checkpoint_format.format(epoch=epoch),
+                args.checkpoint_format.format(optim=args.optim,epoch=epoch),
             )
 
     if args.verbose:

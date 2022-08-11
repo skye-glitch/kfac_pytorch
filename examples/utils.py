@@ -104,7 +104,7 @@ def create_lr_schedule(
         def lr_schedule(epoch: int) -> float:
             """Compute lr scale factor."""
             lr_adj = 1.0
-            print("workers {} epoch {} warmup {}".format(workers, epoch, warmup_epochs))
+            #print("workers {} epoch {} warmup {}".format(workers, epoch, warmup_epochs))
             if epoch < warmup_epochs:
                 lr_adj = (
                     1.0 / workers * (epoch * (workers - 1) / warmup_epochs + 1)

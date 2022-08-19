@@ -158,10 +158,22 @@ def parse_args() -> argparse.Namespace:
         help='KFAC damping const/decay',
     )
     parser.add_argument(
-        '--scale2',
+        '--scale',
         type=float,
-        default=3.8,
+        default=0.266,
         help='scale for sigmoid function in kfac decay damping',
+    )
+    parser.add_argument(
+        '--shift',
+        type=float,
+        default=40,
+        help='shift for sigmoid function in kfac decay damping',
+    )
+    parser.add_argument(
+        '--avg',
+        type=bool,
+        default=False,
+        help='running avg for sigmoid function in kfac decay damping',
     )
     # parser.add_argument(
     #     '--lars',
@@ -186,32 +198,32 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         '--beta1',
-        default=0.9, 
-        type=float, 
+        default=0.9,
+        type=float,
         help='Adam coefficients beta_1',
     )
     parser.add_argument(
         '--beta2',
-        default=0.999, 
-        type=float, 
+        default=0.999,
+        type=float,
         help='Adam coefficients beta_2',
     )
     parser.add_argument(
         '--final_lr',
-        default=-1.0, 
-        type=float, 
+        default=-1.0,
+        type=float,
         help='final learning rate of AdaBound',
     )
     parser.add_argument(
         '--gamma',
-        default=1e-3, 
-        type=float, 
+        default=1e-3,
+        type=float,
         help='convergence speed term of AdaBound',
     )
     parser.add_argument(
         '--eps',
-        default=-1.0, 
-        type=float, 
+        default=-1.0,
+        type=float,
         help='eps for adam',
     )
 

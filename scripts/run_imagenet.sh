@@ -22,11 +22,12 @@
 #       $ ./run_imagenet.sh --epochs 55 --batch-size 128
 #
 
-PRELOAD+="export LD_LIBRARY_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.9/comm_libs/nccl/lib; "
-PRELOAD+="source /pscratch/sd/s/sli/code/torch-1.11/bin/activate; "
-PRELOAD+="module  --ignore-cache load libfabric; "
-PRELOAD+="module load  cudatoolkit/11.5; "
-PRELOAD="export OMP_NUM_THREADS=4 ; "
+PRELOAD="source /etc/profile ; "
+PRELOAD+="module load conda/pytorch ; "
+PRELOAD+="conda activate torch-1.10;"
+PRELOAD+="source switch-cuda.sh;"
+PRELOAD+="source switch-cuda.sh 11.3;"
+PRELOAD+="export OMP_NUM_THREADS=8 ; "
 
 # Arguments to the training script are passed as arguments to this script
 CMD="examples/torch_imagenet_resnet.py $@"

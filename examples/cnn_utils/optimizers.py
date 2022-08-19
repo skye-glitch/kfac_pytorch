@@ -103,42 +103,36 @@ def get_optimizer(
 
         #TODO: new lambda function 
         def get_lambda_decay (
-            total_epochs: int,
             preconditioner,
-            scale2: float = 3.8,
+            scale: float = 0.266,
+            shift: float = 40,
+            avg: bool = False,
         ):
-            shift = total_epochs/2
-            scale1 = 0.07
             def decay(
                 epoch: int,
             ):    
-                def sigmoid(x, shift, scale1, scale2):
-                    exp = np.exp(-scale1*(x-shift) * scale2)
-                    return (1/(1+exp))
-                preconditioner._damping = sigmoid(epoch, shift, scale1, scale2)
+                if not avg:
+                    def sigmoid(x, shift, scale):
+                        exp = np.exp(-scale*(x-shift))
+                        return (1/(1+exp))
+                    preconditioner._damping = sigmoid(epoch, shift, scale)
+                else:
+                    def sigmoid(x, shift, scale):
+                        exp = np.exp(-scale*(x-shift))
+                        return (1/(1+exp))
+                    preconditioner._damping = 0.95 * preconditioner._damping + 0.05 * sigmoid(epoch, shift, scale)
                 #todo: remove test code
                 #print("new damping is {}".format(preconditioner._damping))
             return decay
-            #     adj = 1  
-            #     if epoch == 45:
-            #         adj = 10
-            #     elif epoch == 65:
-            #         adj = 10
-            #     elif epoch == 80:
-            #         adj = 3                
-            #     #print("damping * {}".format(adj))
-            #     return adj
-
-            # return decay
             
 
 
         kfac_param_scheduler = kfac.scheduler.LambdaParamScheduler(
             preconditioner,
             damping_lambda=get_lambda_decay(
-                total_epochs=args.epochs,
                 preconditioner=preconditioner,
-                scale2=args.scale2,
+                scale=args.scale,
+                shift=args.shift,
             ) 
             if args.decay else \
             get_lambda(

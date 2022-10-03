@@ -17,6 +17,7 @@ from torch.utils import collect_env
 from torch.utils.tensorboard import SummaryWriter
 from utils import LabelSmoothLoss
 from utils import save_checkpoint
+from torchinfo import summary
 
 try:
     from torch.cuda.amp import GradScaler
@@ -27,6 +28,10 @@ except ImportError:
 
 warnings.filterwarnings('ignore', '(Possibly )?corrupt EXIF data', UserWarning)
 
+def boolean_string(s):
+    if s not in {'False', 'True'}:
+        raise ValueError('Not a valid boolean string')
+    return s == 'True'
 
 def parse_args() -> argparse.Namespace:
     """Get cmd line args."""
@@ -80,6 +85,27 @@ def parse_args() -> argparse.Namespace:
         '--model',
         default='resnet50',
         help='Model (resnet{35,50,101,152})',
+    )
+    # todo: add model param
+    parser.add_argument(
+        '--zero-init',
+        default=False,
+        help='0 init for last BN layer',
+    )
+    parser.add_argument(
+        '--BN-running-state',
+        default=True,
+        help='BN layer track running state',
+    )
+    parser.add_argument(
+        '--Gaussian-fc',
+        default=False,
+        help='init fc layer with Gaussian distribution',
+    )
+    parser.add_argument(
+        '--no-decay-BN',
+        default=False,
+        help='do not apply weight decay on the learnable BN coefficient',
     )
     parser.add_argument(
         '--batch-size',
@@ -171,7 +197,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         '--avg',
-        type=bool,
+        type=boolean_string,
         default=False,
         help='running avg for sigmoid function in kfac decay damping',
     )
@@ -191,8 +217,8 @@ def parse_args() -> argparse.Namespace:
     #TODO: add arguments
     parser.add_argument(
         '--optim',
-        default='sgd', 
-        type=str, 
+        default='sgd',
+        type=str,
         help='optimizer',
         choices=['sgd', 'adagrad', 'adam', 'amsgrad', 'adabound', 'amsbound','lars'],
     )
@@ -272,10 +298,16 @@ def parse_args() -> argparse.Namespace:
         help='KFAC damping factor (defaultL 0.001)',
     )
     parser.add_argument(
+        '--manual-decay-kfac',
+        type=boolean_string,
+        default=False,
+        help='manual set kfac decay schedule',
+    )
+    parser.add_argument(
         '--kfac-damping-alpha',
         type=float,
-        default=0.5,
-        help='KFAC damping decay factor (default: 0.5)',
+        default=10,
+        help='KFAC rev damping decay factor (default: 10)',
     )
     parser.add_argument(
         '--kfac-damping-decay',
@@ -385,15 +417,43 @@ if __name__ == '__main__':
         torch.distributed.barrier()
 
     train_sampler, train_loader, _, val_loader = datasets.get_imagenet(args)
-    if args.model.lower() == 'resnet50':
-        model = models.resnet50()
+    if args.model.lower() == 'resnet50':#todo: change model according to paper
+        model = models.resnet50(zero_init_residual=args.zero_init)
     elif args.model.lower() == 'resnet101':
-        model = models.resnet101()
+        model = models.resnet101(zero_init_residual=args.zero_init)
     elif args.model.lower() == 'resnet152':
-        model = models.resnet152()
+        model = models.resnet152(zero_init_residual=args.zero_init)
 
+    # todo: initialization BN
+    def BN_running_state(m):
+        if isinstance(m, torch.nn.BatchNorm2d):
+            with torch.no_grad():
+                m.track_running_stats=args.BN_running_state
+    model.apply(BN_running_state)
+
+    # todo: initialization for fc
+    def gaussian_fc(m):
+        if isinstance(m, torch.nn.Linear):
+            m.reset_parameters()
+            with torch.no_grad():
+                torch.nn.init.normal_(m.weight, mean=0.0, std=0.01)
+    if args.Gaussian_fc:
+        model.apply(gaussian_fc)
+    
+
+    
     device = 'cpu' if not args.cuda else 'cuda'
     model.to(device)
+    
+    #print out the model
+    # if args.verbose:
+    #     summary(model, (args.batch_size, 3, 224, 224), device=device)
+    # if args.verbose:
+    #     for module in model.modules():
+    #         if isinstance(module, torch.nn.Linear):
+    #             print(torch.mean(module.weight), torch.std(module.weight))
+
+    
 
     model = torch.nn.parallel.DistributedDataParallel(
         model,
@@ -421,7 +481,8 @@ if __name__ == '__main__':
             )
         scaler = GradScaler()
     args.grad_scaler = scaler
-
+    #todo:remove
+    #print(f'1manual from input is {args.manual_decay_kfac}?')
     (
         optimizer,
         preconditioner,

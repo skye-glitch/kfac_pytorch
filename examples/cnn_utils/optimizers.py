@@ -28,8 +28,10 @@ def get_optimizer(
     ],
 ]:
     """Get optimizer, preconditioner, and scheduler."""
+    #todo: remove 
+    #print(f'2manual from input is {args.manual_decay_kfac}?')
     use_kfac = True if args.kfac_inv_update_steps > 0 else False
-    optimizer = create_optimizer(args, model.parameters())
+    optimizer = create_optimizer(args, model)
     #TODO: add new param
     lrs = create_lr_schedule(
         dist.get_world_size(),
@@ -104,23 +106,37 @@ def get_optimizer(
         #TODO: new lambda function 
         def get_lambda_decay (
             preconditioner,
+            decay_schedule: list[int],
             scale: float = 0.266,
             shift: float = 40,
             avg: bool = False,
+            manual: bool = False,
+            alpha: float = 10,
+            base_damping = 0.001,
         ):
             def decay(
                 epoch: int,
-            ):    
-                if not avg:
-                    def sigmoid(x, shift, scale):
-                        exp = np.exp(-scale*(x-shift))
-                        return (1/(1+exp))
-                    preconditioner._damping = sigmoid(epoch, shift, scale)
+            ): 
+                if manual:
+                    #todo: remove
+                    #print('manual is true?')
+                    dp_adj = 1.0
+                    decay_schedule.sort(reverse=True)
+                    for e in decay_schedule:
+                        if epoch >= e:
+                            dp_adj *= alpha
+                    preconditioner._damping = base_damping * dp_adj
                 else:
-                    def sigmoid(x, shift, scale):
-                        exp = np.exp(-scale*(x-shift))
-                        return (1/(1+exp))
-                    preconditioner._damping = 0.95 * preconditioner._damping + 0.05 * sigmoid(epoch, shift, scale)
+                    if not avg:
+                        def sigmoid(x, shift, scale):
+                            exp = np.exp(-scale*(x-shift))
+                            return (1/(1+exp))
+                        preconditioner._damping = sigmoid(epoch, shift, scale)
+                    else:
+                        def sigmoid(x, shift, scale):
+                            exp = np.exp(-scale*(x-shift))
+                            return (1/(1+exp))
+                        preconditioner._damping = 0.95 * preconditioner._damping + 0.05 * sigmoid(epoch, shift, scale)
                 #todo: remove test code
                 #print("new damping is {}".format(preconditioner._damping))
             return decay
@@ -131,9 +147,14 @@ def get_optimizer(
             preconditioner,
             damping_lambda=get_lambda_decay(
                 preconditioner=preconditioner,
+                decay_schedule=args.kfac_damping_decay,
                 scale=args.scale,
                 shift=args.shift,
-            ) 
+                avg=args.avg,
+                manual=args.manual_decay_kfac,
+                alpha=args.kfac_damping_alpha,
+                base_damping = args.kfac_damping,
+            )
             if args.decay else \
             get_lambda(
                 args.kfac_damping_alpha,
@@ -379,19 +400,44 @@ class AdaBound(Optimizer):
 
         return loss
 
-def create_optimizer(args, model_params):
+def create_optimizer(args, model):
+    def add_weight_decay(model):
+        decay = []
+        no_decay = []
+        for name, param in model.named_parameters():
+            if not param.requires_grad:
+                continue
+            if len(param.shape) == 1 or 'bn' in name:
+                no_decay.append(param)
+                #print(f'add no decay {name}')
+            else:
+                decay.append(param)
+                #print(f'add decay {name}')
+        return [
+            {'params': no_decay, 'weight_decay': 0.},
+            {'params': decay, 'weight_decay': weight_decay}]
+
+    weight_decay = args.weight_decay
+
+    if args.no_decay_BN:
+        model_params = add_weight_decay(model)
+        weight_decay = 0.
+    else:
+        model_params = model.parameters()
+
+
     if args.optim == 'sgd':
         return optim.SGD(
             model_params,
             lr=args.base_lr,
             momentum=args.momentum,
-            weight_decay=args.weight_decay,
+            weight_decay=weight_decay,
         )
     elif args.optim == 'adagrad':
         return optim.Adagrad(
             model_params,
             lr=args.base_lr,
-            weight_decay=args.weight_decay,
+            weight_decay=weight_decay,
             eps=args.eps,
         )
     elif args.optim == 'adam':
@@ -400,7 +446,7 @@ def create_optimizer(args, model_params):
             lr=args.base_lr,
             betas=(args.beta1, args.beta2),
             eps=args.eps,
-            weight_decay=args.weight_decay,
+            weight_decay=weight_decay,
         )
     elif args.optim == 'amsgrad':
         return optim.Adam(
@@ -408,7 +454,7 @@ def create_optimizer(args, model_params):
             lr=args.base_lr,
             betas=(args.beta1, args.beta2),
             eps=args.eps,
-            weight_decay=args.weight_decay,
+            weight_decay=weight_decay,
             amsgrad=True,
         )
     elif args.optim == 'adabound':
@@ -418,7 +464,7 @@ def create_optimizer(args, model_params):
             betas=(args.beta1, args.beta2),
             final_lr=args.final_lr, 
             gamma=args.gamma,
-            weight_decay=args.weight_decay,
+            weight_decay=weight_decay,
             eps=args.eps,
         )
     elif args.optim == 'amsbound':
@@ -428,7 +474,7 @@ def create_optimizer(args, model_params):
             betas=(args.beta1, args.beta2),
             final_lr=args.final_lr, 
             gamma=args.gamma,
-            weight_decay=args.weight_decay,
+            weight_decay=weight_decay,
             amsbound=True,
             eps=args.eps,
         )
@@ -438,7 +484,7 @@ def create_optimizer(args, model_params):
             model_params, 
             lr=args.base_lr,
             momentum=args.momentum,
-            weight_decay=args.weight_decay, 
+            weight_decay=weight_decay, 
             eta=args.trust_coef,
             max_epoch=args.epochs, 
             workers=dist.get_world_size(),

@@ -22,15 +22,13 @@
 #       $ ./run_imagenet.sh --epochs 55 --batch-size 128
 #
 
-PRELOAD="source /etc/profile ; "
-PRELOAD+="module load conda/pytorch ; "
-PRELOAD+="conda activate torch-1.10;"
-PRELOAD+="source switch-cuda.sh;"
-PRELOAD+="source switch-cuda.sh 11.3;"
-PRELOAD+="export OMP_NUM_THREADS=8 ; "
+PRELOAD="module load conda/2022-07-19; "
+PRELOAD+="source /soft/datascience/conda/2022-07-19/mconda3/setup.sh; "
+PRELOAD+="conda activate torch-1.11;"
+PRELOAD+="export OMP_NUM_THREADS=4 ; "
 
 # Arguments to the training script are passed as arguments to this script
-CMD="examples/torch_imagenet_resnet.py $@"
+CMD="/lus/grand/projects/SuperBERT/sli/kfac_pytorch/examples/torch_imagenet_resnet.py $@"
 
 # Example: copy imagenet and extract to /tmp on each worker
 # ./scripts/copy_and_extract.sh /path/to/imagenet.tar /tmp/imagenet
@@ -42,6 +40,8 @@ if [[ -z "${NODEFILE}" ]]; then
         scontrol show hostnames $SLURM_NODELIST > $NODEFILE
     elif [[ -n "${COBALT_NODEFILE}" ]]; then
         NODEFILE=$COBALT_NODEFILE
+    elif [[ -n "${PBS_NODEFILE}" ]]; then
+        NODEFILE=$PBS_NODEFILE
     fi
 fi
 if [[ -z "${NODEFILE}" ]]; then

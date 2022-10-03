@@ -103,7 +103,8 @@ def train(
                         train_loss.avg,
                         100 * train_accuracy.avg,
                         #todo: global_lr for lars
-                        optimizer.global_lr if args.lars else optimizer.param_groups[0]['lr'],
+                        optimizer.param_groups[0]['lr'] if not args.lars 
+                            else optimizer.global_lr,
                     ),
                 )
                 t.update(1)

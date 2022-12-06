@@ -6,6 +6,8 @@ from typing import Callable
 import torch
 import torch.distributed as dist
 from torch.nn.functional import log_softmax
+#todo: add import
+import math
 
 import kfac
 
@@ -92,7 +94,9 @@ def create_lr_schedule(
     workers: int,
     warmup_epochs: int,
     decay_schedule: list[int],
+    args: argparse.Namespace,
     lars: bool = False,
+    poly_decay: bool = False,
     alpha: float = 0.1,
 ) -> Callable[[int], float]:
     """Return lr scheduler lambda."""
@@ -100,11 +104,10 @@ def create_lr_schedule(
     if lars :
         def lr_schedule(epoch: int):
             return 
-    else:
+    elif not poly_decay:
         def lr_schedule(epoch: int) -> float:
             """Compute lr scale factor."""
             lr_adj = 1.0
-            #print("workers {} epoch {} warmup {}".format(workers, epoch, warmup_epochs))
             if epoch < warmup_epochs:
                 lr_adj = (
                     1.0 / workers * (epoch * (workers - 1) / warmup_epochs + 1)
@@ -114,5 +117,18 @@ def create_lr_schedule(
                 for e in decay_schedule:
                     if epoch >= e:
                         lr_adj *= alpha
+            return lr_adj
+    else:
+        #todo: add new scheduler
+        def lr_schedule(epoch: int)-> float:  #eta0: float, estart: int, eend: float, pdecay: float
+            lr_adj = 1.0
+            if epoch < warmup_epochs:
+                lr_adj = (
+                    1.0 / workers * (epoch * (workers - 1) / warmup_epochs + 1)
+                )
+            else:
+                lr_adj = math.pow((1 - (epoch - args.estart)/(args.eend - args.estart)), args.pdecay)
+            # print(f"epoch {epoch} estart {args.estart} eend {args.eend} pdecay {args.pdecay} lr_adj {lr_adj} base {(1 - (epoch - args.estart)/(args.eend - args.estart))}\
+            # in mid  epoch - estart {epoch - args.estart} eend - estart {args.eend - args.estart}, div {(epoch - args.estart)/(args.eend - args.estart)}")
             return lr_adj
     return lr_schedule

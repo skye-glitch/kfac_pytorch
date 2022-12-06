@@ -12,6 +12,7 @@ from examples.utils import accuracy
 from examples.utils import Metric
 #TODO, import
 import torch.distributed as dist
+import numpy as np
 
 
 def train(
@@ -93,13 +94,28 @@ def train(
                         optimizer.step()
                 optimizer.zero_grad()
 
+                #TODO: add weight norm
+                if args.weight_norm:
+                    for group in optimizer.param_groups:
+                        for p in group['params']:
+                            if p.grad is None:
+                                continue
+                            weight_norm = p.norm()
+                            target_norm = np.sqrt(2.0 * p.data.shape[0])
+                            scale = target_norm / (weight_norm + 1e-9)
+                            #print(f"scale is {scale}")
+                            if scale < 1:
+                                # if dist.get_rank() == 0: 
+                                #     print(f"weight scaling by {scale}")
+                                p.data.mul_(scale)
+
                 train_loss.update(step_loss / mini_step)
                 train_accuracy.update(step_accuracy / mini_step)
                 step_loss = 0.0
                 step_accuracy = 0.0
 
                 t.set_postfix_str(
-                    'loss: {:.4f}, acc: {:.2f}%, lr: {:.4f}'.format(
+                    'loss: {:.4f}, acc: {:.2f}%, lr: {:e}'.format(
                         train_loss.avg,
                         100 * train_accuracy.avg,
                         #todo: global_lr for lars

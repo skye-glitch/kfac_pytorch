@@ -89,23 +89,65 @@ def parse_args() -> argparse.Namespace:
     # todo: add model param
     parser.add_argument(
         '--zero-init',
+        type=boolean_string,
         default=False,
         help='0 init for last BN layer',
     )
     parser.add_argument(
         '--BN-running-state',
+        type=boolean_string,
         default=True,
         help='BN layer track running state',
     )
     parser.add_argument(
         '--Gaussian-fc',
         default=False,
+        type=boolean_string,
         help='init fc layer with Gaussian distribution',
     )
     parser.add_argument(
         '--no-decay-BN',
         default=False,
+        type=boolean_string,
         help='do not apply weight decay on the learnable BN coefficient',
+    )
+    # todo: add lr & momentum schedule option
+    parser.add_argument(
+        '--poly-decay',
+        default=False,
+        type=boolean_string,
+        help='polynomial decay for lr and momentum', #Scalable and Practical Natural Gradient for Large-Scale Deep Learning
+    )
+    parser.add_argument(
+        '--estart',
+        default=1,
+        type=float,
+        help='decay starts', 
+    )
+    parser.add_argument(
+        '--eend',
+        default=53,
+        type=float,
+        help='decay ends', 
+    )
+    parser.add_argument(
+        '--pdecay',
+        default=8,
+        type=float,
+        help='speed of the learning rate decay', 
+    )
+    parser.add_argument(
+        '--lr-final',
+        default=False,
+        type=boolean_string,
+        help='input is final lr',
+    )
+    #todo: add weight-norm option
+    parser.add_argument(
+        '--weight-norm',
+        default=False,
+        type=boolean_string,
+        help='normalize weight',
     )
     parser.add_argument(
         '--batch-size',
@@ -220,7 +262,7 @@ def parse_args() -> argparse.Namespace:
         default='sgd',
         type=str,
         help='optimizer',
-        choices=['sgd', 'adagrad', 'adam', 'amsgrad', 'adabound', 'amsbound','lars'],
+        choices=['sgd', 'adagrad', 'adam', 'amsgrad', 'adabound', 'amsbound','lars','lamb'],
     )
     parser.add_argument(
         '--beta1',
@@ -369,6 +411,9 @@ def parse_args() -> argparse.Namespace:
         args.local_rank = int(os.environ['LOCAL_RANK'])
     args.cuda = not args.no_cuda and torch.cuda.is_available()
 
+    #todo: remove print
+    # print(f'zero init {args.zero_init} {type(args.zero_init)}  bn running state {args.BN_running_state} {type(args.BN_running_state)} \
+    #     Gaussian fc {args.Gaussian_fc} {type(args.Gaussian_fc)}, no decay bn {args.no_decay_BN}, {type(args.no_decay_BN)}')
     return args
 
 
@@ -391,12 +436,13 @@ if __name__ == '__main__':
         # torch.backends.cudnn.benchmark = False
         # torch.backends.cudnn.deterministic = True
 
-    args.base_lr = (
-        29.0 if dist.get_world_size() * args.batch_size == 32 * 1024 else 
-        # (2.5 if dist.get_world_size() * args.batch_size == 16 * 1024 else
-        # 0.6 if dist.get_world_size() * args.batch_size == 8 * 1024 else
-        args.base_lr * dist.get_world_size() * args.batches_per_allreduce#)
-    )
+    if not args.lr_final:
+        args.base_lr = (
+            #29.0 if dist.get_world_size() * args.batch_size == 32 * 1024 else 
+            # (2.5 if dist.get_world_size() * args.batch_size == 16 * 1024 else
+            # 0.6 if dist.get_world_size() * args.batch_size == 8 * 1024 else
+            args.base_lr * dist.get_world_size() * args.batches_per_allreduce#)
+        )
     #todo, set final lr as base lr if not manually given 
     args.final_lr = args.base_lr if args.final_lr <= 0 else args.final_lr
     args.eps = args.base_lr if args.eps <= 0 else args.eps
@@ -527,6 +573,18 @@ if __name__ == '__main__':
         #TODO: no need to do this if lars
         if lr_scheduler is not None:
             lr_scheduler.step()
+
+            #TODO: need to adjust momentum too
+            if args.poly_decay and args.base_lr > optimizer.param_groups[0]['lr']:
+                updated_m = args.momentum / args.base_lr * optimizer.param_groups[0]['lr']
+                for g in optimizer.param_groups: 
+                    #print(g.keys())
+                    if 'momentum' in g:
+                        g['momentum'] = updated_m
+                        #todo: remove print
+                        # if dist.get_rank() == 0: 
+                        #     print(f"update momentum to  {updated_m}")
+
         if kfac_scheduler is not None:
             #todo: remove test code
             kfac_scheduler.step(step=epoch)

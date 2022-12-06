@@ -14,6 +14,7 @@ from examples.utils import create_lr_schedule
 #todo new import
 import math
 import numpy as np
+from apex.optimizers import FusedLAMB
 
 
 def get_optimizer(
@@ -32,12 +33,17 @@ def get_optimizer(
     #print(f'2manual from input is {args.manual_decay_kfac}?')
     use_kfac = True if args.kfac_inv_update_steps > 0 else False
     optimizer = create_optimizer(args, model)
+    #TODO: remove
+    # if dist.get_rank() == 0:
+    #     print(optimizer)
     #TODO: add new param
     lrs = create_lr_schedule(
         dist.get_world_size(),
         args.warmup_epochs,
         args.lr_decay,
+        args,
         args.lars,
+        args.poly_decay,
     )
     #print("2 optimizer, ",optimizer)
     #todo: only need the scheduler for SGD
@@ -267,6 +273,8 @@ class LARS(Optimizer):
                 # Compute local learning rate for this layer
                 local_lr = eta * weight_norm / \
                     (grad_norm + weight_decay * weight_norm)
+                # if local_lr == float('Inf'):
+                #     local_lr = 1.0
 
                 # Update the momentum term
                 actual_lr = local_lr * self.global_lr
@@ -274,7 +282,7 @@ class LARS(Optimizer):
                 i += 1
                 # if dist.get_rank() == 0:
                 #     if toPrint and actual_lr.item() > 1e-8:
-                #         print("printing actual lr for epoch {}, param {}, {}".format(epoch, i, actual_lr.item()))
+                #         print(f"weight norm {weight_norm} grad norm {grad_norm} weight decay {weight_decay} local lr {type(local_lr)} {local_lr} actual lr for epoch {epoch}, param {i}, type{type(actual_lr)},{actual_lr}, global lr {self.global_lr}")
                     
 
                 if 'momentum_buffer' not in param_state:
@@ -401,7 +409,7 @@ class AdaBound(Optimizer):
         return loss
 
 def create_optimizer(args, model):
-    def add_weight_decay(model):
+    def add_weight_decay(model, weight_decay=0.9):
         decay = []
         no_decay = []
         for name, param in model.named_parameters():
@@ -418,9 +426,8 @@ def create_optimizer(args, model):
             {'params': decay, 'weight_decay': weight_decay}]
 
     weight_decay = args.weight_decay
-
     if args.no_decay_BN:
-        model_params = add_weight_decay(model)
+        model_params = add_weight_decay(model, weight_decay)
         weight_decay = 0.
     else:
         model_params = model.parameters()
@@ -477,6 +484,11 @@ def create_optimizer(args, model):
             weight_decay=weight_decay,
             amsbound=True,
             eps=args.eps,
+        )
+    elif args.optim == 'lamb':
+        return FusedLAMB(
+            model_params,
+            lr=args.base_lr,
         )
     else:
         assert args.optim == 'lars'

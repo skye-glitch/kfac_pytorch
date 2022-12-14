@@ -46,6 +46,7 @@ class BaseKFACPreconditioner:
         loglevel: int = logging.DEBUG,
         #TODO
         decay: bool = False,
+        firstInv: int = 10,
     ) -> None:
         """Init KFACBasePreconditioner.
 
@@ -131,6 +132,8 @@ class BaseKFACPreconditioner:
         # registered with KFAC
         self._mini_steps: dict[str, int] = defaultdict(int)
 
+        self._firstInv = firstInv
+
         # Register hooks on all modules
         for module in self._layers:
             module.register_forward_pre_hook(self._save_input)
@@ -153,6 +156,7 @@ class BaseKFACPreconditioner:
             ('lr', self._lr),
             ('steps', self.steps),
             ('update_factors_in_hook', self._update_factors_in_hook),
+            ('firstInv', self._firstInv),
         ]
         if self._defaults is not None:
             params.extend(list(self._defaults.items()))
@@ -187,6 +191,10 @@ class BaseKFACPreconditioner:
             if callable(self._kl_clip)
             else self._kl_clip
         )
+
+    @property
+    def firstInv(self) -> int:
+        return self._firstInv
 
     @property
     def lr(self) -> float:
@@ -281,6 +289,8 @@ class BaseKFACPreconditioner:
             self._factor_decay = state_dict['factor_decay']
         if 'kl_clip' in state_dict:
             self._kl_clip = state_dict['kl_clip']
+        if 'firstInv' in state_dict:
+            self._firstInv = state_dict['firstInv']
         if 'lr' in state_dict:
             self._lr = state_dict['lr']
         if 'layers' in state_dict:
@@ -317,7 +327,7 @@ class BaseKFACPreconditioner:
                     )
 
     @torch.no_grad()
-    def step(self) -> None:
+    def step(self, epoch = 1000_000_000) -> None:
         """Perform one K-FAC step.
 
         Note:
@@ -346,7 +356,8 @@ class BaseKFACPreconditioner:
         self._tdc.flush_allreduce_buckets()
 
         # Compute Inverses
-        if self.steps % self.inv_update_steps == 0:
+        # todo: can skip inverse for the first few epochs
+        if epoch >= self.firstInv and self.steps % self.inv_update_steps == 0:
             for name, layer in reversed(list(self._layers.values())):
                 if get_rank() == self._assignment.inv_worker(name, 'A'):
                     layer.compute_a_inv(damping=self.damping)
@@ -369,23 +380,28 @@ class BaseKFACPreconditioner:
                         group=self._assignment.grad_worker_group(name),
                     )
             self._tdc.flush_allreduce_buckets()
+        elif epoch < self.firstInv and self.steps % self.inv_update_steps == 0:
+            if get_rank()  == 0:
+                print(f"at epoch {epoch} did not calc inv")
+
 
         # Compute Preconditioned Gradients
-        for name, layer in reversed(list(self._layers.values())):
-            if self._assignment.is_grad_worker(name):
-                layer.preconditioned_grad(damping=self.damping)
-            if self._assignment.broadcast_gradients():
-                layer.broadcast_grad(
-                    src=self._assignment.src_grad_worker(name),
-                    group=self._assignment.grad_receiver_group(name),
-                )
-        self._tdc.flush_allreduce_buckets()
+        if epoch >= self.firstInv:
+            for name, layer in reversed(list(self._layers.values())):
+                if self._assignment.is_grad_worker(name):
+                    layer.preconditioned_grad(damping=self.damping)
+                if self._assignment.broadcast_gradients():
+                    layer.broadcast_grad(
+                        src=self._assignment.src_grad_worker(name),
+                        group=self._assignment.grad_receiver_group(name),
+                    )
+            self._tdc.flush_allreduce_buckets()
 
-        scale = None if self.kl_clip is None else self._compute_grad_scale()
+            scale = None if self.kl_clip is None else self._compute_grad_scale()
 
-        # Update gradients in-place
-        for _, layer in reversed(list(self._layers.values())):
-            layer.update_grad(scale=scale)
+            # Update gradients in-place
+            for _, layer in reversed(list(self._layers.values())):
+                layer.update_grad(scale=scale)
 
         self._steps += 1
         self._mini_steps = defaultdict(int)

@@ -80,6 +80,7 @@ class KFACPreconditioner(BaseKFACPreconditioner):
         loglevel: int = logging.DEBUG,
         #TODO, send in extra param
         decay: bool = False,
+        firstInv = 10,
     ) -> None:
         """Init KFACPreconditioner.
 
@@ -326,4 +327,5 @@ class KFACPreconditioner(BaseKFACPreconditioner):
             loglevel=loglevel,
             #TODO, add extra param
             decay=decay,
+            firstInv=firstInv,
         )

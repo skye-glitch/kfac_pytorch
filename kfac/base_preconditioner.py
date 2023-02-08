@@ -264,6 +264,7 @@ class BaseKFACPreconditioner:
         self,
         state_dict: dict[str, Any],
         compute_inverses: bool = True,
+        epoch: int = 100,
     ) -> None:
         """Loads the KFAC state.
 
@@ -314,17 +315,18 @@ class BaseKFACPreconditioner:
             compute_inverses = False  # Cannot be computed if no layers
         if compute_inverses:
             for name, layer in self._layers.values():
-                layer.compute_a_inv(damping=self.damping)
-                layer.compute_g_inv(damping=self.damping)
-                if self._assignment.broadcast_inverses():
-                    layer.broadcast_a_inv(
-                        src=self._assignment.inv_worker(name, 'A'),
-                        group=self._assignment.grad_worker_group(name),
-                    )
-                    layer.broadcast_g_inv(
-                        src=self._assignment.inv_worker(name, 'G'),
-                        group=self._assignment.grad_worker_group(name),
-                    )
+                if epoch >= self.firstInv:
+                    layer.compute_a_inv(damping=self.damping)
+                    layer.compute_g_inv(damping=self.damping)
+                    if self._assignment.broadcast_inverses():
+                        layer.broadcast_a_inv(
+                            src=self._assignment.inv_worker(name, 'A'),
+                            group=self._assignment.grad_worker_group(name),
+                        )
+                        layer.broadcast_g_inv(
+                            src=self._assignment.inv_worker(name, 'G'),
+                            group=self._assignment.grad_worker_group(name),
+                        )
 
     @torch.no_grad()
     def step(self, epoch = 1000_000_000) -> None:
@@ -357,6 +359,7 @@ class BaseKFACPreconditioner:
 
         # Compute Inverses
         # todo: can skip inverse for the first few epochs
+        #print(f'in kfac step, at epoch {epoch}')
         if epoch >= self.firstInv and self.steps % self.inv_update_steps == 0:
             for name, layer in reversed(list(self._layers.values())):
                 if get_rank() == self._assignment.inv_worker(name, 'A'):
@@ -380,6 +383,7 @@ class BaseKFACPreconditioner:
                         group=self._assignment.grad_worker_group(name),
                     )
             self._tdc.flush_allreduce_buckets()
+            #print(f"at epoch {epoch} yes calc inv")
         elif epoch < self.firstInv and self.steps % self.inv_update_steps == 0:
             if get_rank()  == 0:
                 print(f"at epoch {epoch} did not calc inv")

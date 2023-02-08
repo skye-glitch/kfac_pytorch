@@ -489,6 +489,7 @@ def create_optimizer(args, model):
         return FusedLAMB(
             model_params,
             lr=args.base_lr,
+            weight_decay=weight_decay,
         )
     else:
         assert args.optim == 'lars'

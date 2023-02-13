@@ -391,7 +391,19 @@ class BaseKFACPreconditioner:
 
         # Compute Preconditioned Gradients
         if epoch >= self.firstInv:
+            computeFlag = True
             for name, layer in reversed(list(self._layers.values())):
+            #todo: don't do this until we have inversed A and G
+                if (
+                    layer.qa is None
+                    or layer.qg is None
+                    or (not layer.prediv_eigenvalues and layer.da is None)
+                    or (not layer.prediv_eigenvalues and layer.dg is None)
+                    or (layer.prediv_eigenvalues and layer.dgda is None)
+                ):
+                    computeFlag = False
+                    continue
+
                 if self._assignment.is_grad_worker(name):
                     layer.preconditioned_grad(damping=self.damping)
                 if self._assignment.broadcast_gradients():
@@ -399,13 +411,15 @@ class BaseKFACPreconditioner:
                         src=self._assignment.src_grad_worker(name),
                         group=self._assignment.grad_receiver_group(name),
                     )
-            self._tdc.flush_allreduce_buckets()
+            #todo: don't do this until we have inversed A and G
+            if computeFlag:
+                self._tdc.flush_allreduce_buckets()
 
-            scale = None if self.kl_clip is None else self._compute_grad_scale()
+                scale = None if self.kl_clip is None else self._compute_grad_scale()
 
-            # Update gradients in-place
-            for _, layer in reversed(list(self._layers.values())):
-                layer.update_grad(scale=scale)
+                # Update gradients in-place
+                for _, layer in reversed(list(self._layers.values())):
+                    layer.update_grad(scale=scale)
 
         self._steps += 1
         self._mini_steps = defaultdict(int)

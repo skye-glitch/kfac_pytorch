@@ -79,8 +79,7 @@ class KFACPreconditioner(BaseKFACPreconditioner):
         update_factors_in_hook: bool = True,
         loglevel: int = logging.DEBUG,
         #TODO, send in extra param
-        decay: bool = False,
-        firstInv = 10,
+        firstInv = 0,
     ) -> None:
         """Init KFACPreconditioner.
 
@@ -326,6 +325,5 @@ class KFACPreconditioner(BaseKFACPreconditioner):
             tdc=self.tdc,
             loglevel=loglevel,
             #TODO, add extra param
-            decay=decay,
             firstInv=firstInv,
         )

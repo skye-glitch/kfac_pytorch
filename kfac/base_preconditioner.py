@@ -44,9 +44,8 @@ class BaseKFACPreconditioner:
         update_factors_in_hook: bool = True,
         defaults: dict[str, Any] | None = None,
         loglevel: int = logging.DEBUG,
-        #TODO
-        decay: bool = False,
-        firstInv: int = 10,
+        #TODO: add param
+        firstInv: int = 0,
     ) -> None:
         """Init KFACBasePreconditioner.
 
@@ -114,8 +113,6 @@ class BaseKFACPreconditioner:
         self._assignment = assignment
         self._damping = damping
         self._defaults = defaults
-        #todo: add new param
-        self._decay = decay
         self._factor_decay = factor_decay
         self._factor_update_steps = factor_update_steps
         self._inv_update_steps = inv_update_steps
@@ -145,8 +142,6 @@ class BaseKFACPreconditioner:
             ('accumulation_steps', self._accumulation_steps),
             ('assignment', self._assignment.__class__.__name__),
             ('damping', self._damping),
-            #TODO, return extra param
-            ('decay', self._decay),
             ('factor_decay', self._factor_decay),
             ('factor_update_steps', self._factor_update_steps),
             ('inv_update_steps', self._inv_update_steps),
@@ -284,8 +279,6 @@ class BaseKFACPreconditioner:
         if 'damping' in state_dict:
             self._damping = state_dict['damping']
         #TODO: add extra param
-        if 'decay' in state_dict:
-            self._decay = state_dict['decay']
         if 'factor_decay' in state_dict:
             self._factor_decay = state_dict['factor_decay']
         if 'kl_clip' in state_dict:
@@ -359,7 +352,6 @@ class BaseKFACPreconditioner:
 
         # Compute Inverses
         # todo: can skip inverse for the first few epochs
-        #print(f'in kfac step, at epoch {epoch}')
         if epoch >= self.firstInv and self.steps % self.inv_update_steps == 0:
             for name, layer in reversed(list(self._layers.values())):
                 if get_rank() == self._assignment.inv_worker(name, 'A'):
@@ -383,13 +375,10 @@ class BaseKFACPreconditioner:
                         group=self._assignment.grad_worker_group(name),
                     )
             self._tdc.flush_allreduce_buckets()
-            #print(f"at epoch {epoch} yes calc inv")
-        elif epoch < self.firstInv and self.steps % self.inv_update_steps == 0:
-            if get_rank()  == 0:
-                print(f"at epoch {epoch} did not calc inv")
 
 
         # Compute Preconditioned Gradients
+        computeFlag = False
         if epoch >= self.firstInv:
             computeFlag = True
             for name, layer in reversed(list(self._layers.values())):
@@ -412,14 +401,14 @@ class BaseKFACPreconditioner:
                         group=self._assignment.grad_receiver_group(name),
                     )
             #todo: don't do this until we have inversed A and G
-            if computeFlag:
-                self._tdc.flush_allreduce_buckets()
+        self._tdc.flush_allreduce_buckets()
+        if computeFlag:
+            scale = None if self.kl_clip is None else self._compute_grad_scale()
 
-                scale = None if self.kl_clip is None else self._compute_grad_scale()
-
-                # Update gradients in-place
-                for _, layer in reversed(list(self._layers.values())):
-                    layer.update_grad(scale=scale)
+            # Update gradients in-place
+            # mark = None
+            for _, layer in reversed(list(self._layers.values())):
+                layer.update_grad(scale=scale)
 
         self._steps += 1
         self._mini_steps = defaultdict(int)
@@ -471,9 +460,6 @@ class BaseKFACPreconditioner:
             else:
                 v1 = layer.grad.view(w.size())
             vg_sum += (v1 * w * self.lr**2).sum().item()
-            # print("lr ", self.lr)
-            # if vg_sum < 1e-8:
-            #     print("has bias? {} has grad?{} w {} lr {}".format(layer.module.has_bias(), v1, w, self.lr))
             if layer.module.has_bias():
                 vg_sum += (v2 * b * self.lr**2).sum().item()
             if vg_sum == 0.0:

@@ -240,8 +240,6 @@ class BaseKFACPreconditioner:
             state_dict['inv_update_steps'] = self._inv_update_steps
         if not callable(self._damping):
             state_dict['damping'] = self._damping
-        #TODO: add extra state param
-        state_dict['decay'] = self._decay
         if not callable(self._factor_decay):
             state_dict['factor_decay'] = self._factor_decay
         if not callable(self._kl_clip):

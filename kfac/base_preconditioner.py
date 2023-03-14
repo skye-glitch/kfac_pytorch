@@ -307,6 +307,7 @@ class BaseKFACPreconditioner:
         if compute_inverses:
             for name, layer in self._layers.values():
                 if epoch >= self.firstInv:
+                    print(f'comput inverse at load state dict epoch {epoch}')
                     layer.compute_a_inv(damping=self.damping)
                     layer.compute_g_inv(damping=self.damping)
                     if self._assignment.broadcast_inverses():
@@ -318,6 +319,8 @@ class BaseKFACPreconditioner:
                             src=self._assignment.inv_worker(name, 'G'),
                             group=self._assignment.grad_worker_group(name),
                         )
+                else:
+                    print(f'no calc at load state dict epoch {epoch}')
 
     @torch.no_grad()
     def step(self, epoch = 1000_000_000) -> None:
@@ -351,6 +354,7 @@ class BaseKFACPreconditioner:
         # Compute Inverses
         # todo: can skip inverse for the first few epochs
         if epoch >= self.firstInv and self.steps % self.inv_update_steps == 0:
+            print(f'compute inv at epoch {epoch}')
             for name, layer in reversed(list(self._layers.values())):
                 if get_rank() == self._assignment.inv_worker(name, 'A'):
                     layer.compute_a_inv(damping=self.damping)
@@ -373,6 +377,8 @@ class BaseKFACPreconditioner:
                         group=self._assignment.grad_worker_group(name),
                     )
             self._tdc.flush_allreduce_buckets()
+        else:
+            print(f'did not calc at epoch {epoch}')
 
 
         # Compute Preconditioned Gradients
